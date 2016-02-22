@@ -1,0 +1,18 @@
+body{
+	font-family: Verdana, 'Lucida Sans Unicode', sans-serif ;
+	
+}
+
+div.step{
+	margin:10px;
+	border: 1px dashed #999999;
+	background-color:#eeeeee;
+}
+
+div.inner-box{
+	border:1px solid #999999;
+	margin:3px;
+	padding:3px;
+	background-color:#ffffff;
+}
+

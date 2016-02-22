@@ -1,0 +1,5 @@
+RDF
+
+http://www.jenitennison.com/rdfquery/symbols/jQuery.rdf.databank.html
+https://code.google.com/archive/p/rdfquery/downloads
+https://code.google.com/archive/p/rdfquery/wikis/RdfPlugin.wiki
