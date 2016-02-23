@@ -35,7 +35,7 @@ var inputArea = {
 			input : input = $("#input-area").html()
 		};
 	}
-}
+};
 
 var eService = {
 
@@ -63,8 +63,7 @@ var eService = {
 		jQuery.ajax({
 			url : "assets/html/step.html",
 			success : function(result) {
-				stepHtml = result;
-
+				stepHtml = result
 			},
 			async : false
 		});
@@ -95,35 +94,23 @@ var eService = {
 		return inputArea.getInput();
 	},
 
-	output : function() {
-
+	output : function(data) {
 //		$("#rdf-1").html(this.nif);
-//		console.log($("#rdf-1").rdf().size());
-		
-		
-		var rdf = $.rdf();
-		rdf.databank.load(this.nif);
-		console.log(rdf.size());
-		var test = rdf
-				.prefix("nif",
-						"http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#")
-				.where("?s nif:isString ?o");
-		
-		test.each(function(){
-			console.log(this.o.value);
-		})
-		console.log(test.size());
 
-		
-		
-		// .prefix("nif",
-		// "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#").reason("?res
-		// nif:isString ?string").each(function(){
-		// console.error(this);
-		// });
-		// console.log(test);
+		var rdf = $.rdf().load(data, {});
+		console.log(JSON.stringify(rdf.databank.dump()));
+
+		var test = rdf
+			.prefix("nif",
+				"http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#")
+			.where("?s nif:isString ?o");
+
+		test.each(function () {
+			console.log(this.o.value);
+		});
+		console.log(test.size());
 	}
-}
+};
 
 var eEntity = {
 
@@ -146,7 +133,19 @@ var eEntity = {
 		variables += "&dataset=" + $("#dataset-" + this.id).val();
 		variables += "&language=" + $("#language-" + this.id).val();
 		var that = this;
-		$.ajax({
+
+		$.post(
+			fwm.fremeApi + "/e-entity/freme-ner/documents" + variables,
+			input.input,
+			function() {},
+			'xml')
+				.done(function(data) {
+					that.output(data);
+				})
+				.fail(function() { alert("error"); })
+				.always(function() {});
+	}
+	/*	$.ajax({
 			url : fwm.fremeApi + "/e-entity/freme-ner/documents" + variables,
 			data : input.input,
 			type : 'POST',
@@ -155,10 +154,10 @@ var eEntity = {
 			contentType: "text/plain",
 			success : function(response) {
 				that.nif = response;
-				that.output();
+				that.output(response);
 			}
 		});
-	}
-}
+	}*/
+};
 
 var test = Object.create(eEntity);
