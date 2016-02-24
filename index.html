@@ -33,8 +33,8 @@
 			<div class="inner-box">
 				<h2>Input text</h2>
 				<input type="hidden" name="informat" value="text" />
-				<!-- <textarea rows="15" style="width: 100%" id="input-area">Berlin is the capital of Germany and one of the 16 states of Germany. With a population of 3.5 million people, it is the second most populous city proper and the seventh most populous urban area in the European Union. Located in northeastern Germany on the banks of Rivers Spree and Havel, it is the centre of the Berlin-Brandenburg Metropolitan Region, which has about six million residents from over 180 nations. Due to its location in the European Plain, Berlin is influenced by a temperate seasonal climate. Around one-third of the city's area is composed of forests, parks, gardens, rivers and lakes.</textarea> -->
-				<textarea rows="15" style="width: 100%" id="input-area">Berlin is the capital of Germany.</textarea>
+				<textarea rows="15" style="width: 100%" id="input-area">Berlin is the capital of Germany and one of the 16 states of Germany. With a population of 3.5 million people, it is the second most populous city proper and the seventh most populous urban area in the European Union. Located in northeastern Germany on the banks of Rivers Spree and Havel, it is the centre of the Berlin-Brandenburg Metropolitan Region, which has about six million residents from over 180 nations. Due to its location in the European Plain, Berlin is influenced by a temperate seasonal climate. Around one-third of the city's area is composed of forests, parks, gardens, rivers and lakes.</textarea>
+				<!--<textarea rows="15" style="width: 100%" id="input-area">Berlin is the capital of Germany.</textarea>-->
 				<br />
 				<table>
 					<tr>
@@ -122,8 +122,10 @@
 		<div class="step">
 			<div class="inner-box">
 				<h2>Add e-Service</h2>
-				<a href="#">e-Entity</a><br /> <a href="#">e-Link</a><br /> <a
-					href="#">e-Terminology</a><br /> <a href="#">e-Translation</a><br />
+				<button onclick="fwm.addEService('e-entity')">e-Entity</button><br />
+				<button>e-Link</button><br />
+				<button>e-Terminology</button><br />
+				<button>e-Translation</button><br />
 			</div>
 		</div>
 
@@ -137,14 +139,14 @@
 
 				<button>Apply filter</button>
 			</div>
-
+<!--
 			<div class="inner-box">
 				<h2>Filter "entities only"</h2>
 				<ul>
 					<li>Berlin
 					<li>Germany
 				</ul>
-			</div>
+			</div>-->
 		</div>
 	</div>
 </body>
