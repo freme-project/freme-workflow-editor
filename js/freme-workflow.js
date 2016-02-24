@@ -98,17 +98,20 @@ var eService = {
 //		$("#rdf-1").html(this.nif);
 
 		var rdf = $.rdf().load(data, {});
-		console.log(JSON.stringify(rdf.databank.dump()));
 
 		var test = rdf
-			.prefix("nif",
-				"http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#")
-			.where("?s nif:isString ?o");
-
-		test.each(function () {
-			console.log(this.o.value);
-		});
-		console.log(test.size());
+			.prefix("rdf",
+				"http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#");
+		var d = rdf.databank.dump();
+		for (var key in d) {
+			if (d.hasOwnProperty(key)) {
+				console.log(key);
+				console.log(d[key]);
+			}
+		}
+		//console.log(JSON.stringify(rdf.databank.dump()));
+		/*console.log(test.size());
+		*/
 	}
 };
 
@@ -136,7 +139,7 @@ var eEntity = {
 
 		$.post(
 			fwm.fremeApi + "/e-entity/freme-ner/documents" + variables,
-			input.input,
+			{"input": input.input},
 			function() {},
 			'xml')
 				.done(function(data) {
@@ -145,19 +148,7 @@ var eEntity = {
 				.fail(function() { alert("error"); })
 				.always(function() {});
 	}
-	/*	$.ajax({
-			url : fwm.fremeApi + "/e-entity/freme-ner/documents" + variables,
-			data : input.input,
-			type : 'POST',
-			processData : false,
-			dataType: "text",
-			contentType: "text/plain",
-			success : function(response) {
-				that.nif = response;
-				that.output(response);
-			}
-		});
-	}*/
+
 };
 
 var test = Object.create(eEntity);
