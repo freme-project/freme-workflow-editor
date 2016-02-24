@@ -5,7 +5,6 @@ $(document).ready(function() {
 		fwm.addEService("e-entity").doEnrichment();
 	}
 
-	console.log("asdf");
 });
 
 var debug = true;
@@ -247,7 +246,6 @@ var eEntity = {
 	},
 	doEnrichment : function() {
 		var input = this.getInput();
-		console.log(input.input);
 		var variables = "?informat=" + input.informat;
 		variables += "&outformat=rdf-xml";
 		variables += "&dataset=" + $("#dataset-" + this.id).val();
