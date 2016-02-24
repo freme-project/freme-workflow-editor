@@ -99,20 +99,75 @@ var eService = {
 
 		var rdf = $.rdf().load(data, {});
 
-		var test = rdf
-			.prefix("rdf",
-				"http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#");
-		var d = rdf.databank.dump();
-		for (var key in d) {
-			if (d.hasOwnProperty(key)) {
-				console.log(key);
-				console.log(d[key]);
+	//	var test = rdf
+	//		.prefix("rdf",
+	//			"http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#");
+
+		var datadump = rdf.databank.dump();
+		var mode;
+
+		annotations=[];
+		for (var annotation in datadump) {
+			if (datadump.hasOwnProperty(annotation)) {
+				var annoObj={};
+
+
+				for (var predicate in datadump[annotation]) {
+					if (datadump[annotation].hasOwnProperty(predicate)){
+
+						attribute="undefined";
+						mode="collection";
+
+						if (predicate.match( re("taIdentRef"))) {
+							attribute="identRef";
+							mode="unique";
+						} else if (predicate.match( re("taConfidence"))) {
+							attribute="confidence";
+							mode="unique";
+						} else if (predicate.match( re("taClassRef"))) {
+							attribute="class";
+							mode="collection";
+						} else if (predicate.match( re("anchorOf"))) {
+							attribute ="name";
+							mode ="unique"
+						}
+						annoObj[attribute]={};
+
+
+						for (var value in datadump[annotation][predicate]) {
+							if (datadump[annotation][predicate].hasOwnProperty(value)) {
+
+								var val =  datadump[annotation][predicate][value].value;
+								if (mode==="unique") {
+									annoObj[attribute]=val;
+								} else if (mode==="append") {
+									annoObj[attribute][value]=val;
+								}
+								//		console.log(annotation, "\t\t..."+predicate.substring(predicate.length-10,predicate.length),val.substring(val.length-10, val.length));
+							}
+						}
+
+					}
+
+
+				}
 			}
+			annotations.push(annoObj);
 		}
+
+		var i;
+		console.log("output:");
+		for (i=0;i<annotations.length;i++) {
+			console.log(annotations[i]);
+		}
+
 		//console.log(JSON.stringify(rdf.databank.dump()));
 		/*console.log(test.size());
 		*/
 	}
+};
+var re =  function(name){
+	return new RegExp("http://.*#"+name);
 };
 
 var eEntity = {
