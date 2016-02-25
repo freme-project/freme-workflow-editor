@@ -38,10 +38,9 @@ var eEntity = {
             'xml')
             .done(function(data) {
 
-                that.nif=xmlToString(data);
+                fwm.eServices[that.id].nif=xmlToString(data);
                 var annotations = createAnnotationsFromXml(data,eEntity.unique,eEntity.collection);
-                var input= $("#input-area").val();
-                $("#output-"+that.id).html(matchAnnotationsToString(input,annotations,that.generateTooltipText));
+                $("#output-"+that.id).html(matchAnnotationsToString(input.input,annotations,that.generateTooltipText,that.id));
                 $(".tooltip").tooltipster({contentAsHTML:true});
 
             })
@@ -50,8 +49,8 @@ var eEntity = {
     },
 
 
-    generateTooltipText : function(annotation) {
-        var tooltip="";
+    generateTooltipText : function(annotation,str,id) {
+        var tooltip="<a href=\"#\" class=\"tooltip\" title=\"";
         for (var i=0; i<eEntity.unique.length; i++) {
             if (annotation[eEntity.unique[i]]) {
                 tooltip+="&lt;p&gt;&lt;strong&gt;" + eEntity.unique[i] + " : &lt;/strong&gt;"+ annotation[eEntity.unique[i]] + "&lt;/p&gt;";
@@ -60,7 +59,7 @@ var eEntity = {
 
        for (i=0; i<eEntity.collection.length; i++) {
            if (annotation[eEntity.collection[i]].length!=0) {
-                tooltip+="&lt;p&gt;&lt;strong&gt;"+ eEntity.collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
+                    tooltip+="&lt;p&gt;&lt;strong&gt;"+ eEntity.collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
                for (var item in annotation[eEntity.collection[i]]) {
                    if (annotation[eEntity.collection[i]].hasOwnProperty(item)) {
                        tooltip += "&lt;li&gt;" + annotation[eEntity.collection[i]][item] + "&lt;/li&gt;";
@@ -69,7 +68,7 @@ var eEntity = {
                tooltip+="&lt;/ul&gt;";
            }
        }
-        return tooltip;
+        return tooltip + "\"> " + str + "</a>" ;
     }
 };
 
@@ -92,12 +91,15 @@ var eLink = {
     doEnrichment : function() {
     },
 
-    generateTooltipText : function(annotation) {
+    generateTooltipText : function(annotation,str) {
         return "";
     }
 };
-
 var eTranslation = {
+
+
+    unique: ["target"],
+    collection: [],
 
     createHtml : function() {
         var data = {
@@ -113,10 +115,32 @@ var eTranslation = {
     },
 
     doEnrichment : function() {
+        var input = this.getInput();
+        var variables = "?informat=" + input.informat;
+        variables += "&outformat=rdf-xml";
+        variables += "&source-lang=" + $("#source-lang-" + this.id).val();
+        variables += "&target-lang=" + $("#target-lang-" + this.id).val();
+        var that = this;
+
+        $.post(
+                fwm.fremeApi + "/e-translation/tilde" + variables,
+            {"input": input.input},
+            function() {},
+            'xml')
+            .done(function(data) {
+                fwm.eServices[that.id].nif=xmlToString(data);
+
+                var annotations = createAnnotationsFromXml(data,eTranslation.unique,eTranslation.collection);
+                $("#output-"+that.id).html(matchAnnotationsToString(input.input ,annotations,that.generateTooltipText,that.id));
+                $(".tooltip").tooltipster({contentAsHTML:true});
+
+            })
+            .fail(function(data) { alert("asdf"+ JSON.parse(data)); })
+            .always(function() {});
     },
 
-    generateTooltipText : function(annotation) {
-        return "";
+    generateTooltipText : function(annotation,str,id) {
+        return str+ "<br><br><strong>Translation to:</strong><p>" +  $("#target-lang-" + id).val()+ "</p>" +  annotation.target;
     }
 };
 
@@ -142,3 +166,5 @@ var eTerminology = {
         return "";
     }
 };
+
+var holdid;

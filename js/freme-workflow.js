@@ -3,11 +3,12 @@ $(document).ready(function() {
 	if (debug) {
 		console.log("DEBUG!!!")
 		fwm.addEService("e-entity").doEnrichment();
+		fwm.addEService("e-translation");
 	}
 
 });
 
-var debug = true;
+var debug = false;
 var fwm = {
 
 	eServices : [],
@@ -18,28 +19,26 @@ var fwm = {
 
 		var newEService = null;
 
-		if (this.eServices.length==0 || !(this.eServices[this.eServices.length-1].type == type)) {
-			if (type == "e-entity") {
-				newEService = Object.create(eEntity);
-			}
-			else if (type == "e-link") {
-				newEService = Object.create(eLink);
-			} else if (type == "e-translation"){
-				newEService = Object.create(eTranslation);
-			} else if (type == "e-terminology"){
-				newEService = Object.create(eTerminology);
-			}
-
-			$.extend(newEService, eService);
-			newEService.createId();
-
-			newEService.createHtml();
-			this.eServices.push({type: type, service: newEService});
-
-			return newEService;
+		if (type == "e-entity") {
+			newEService = Object.create(eEntity);
 		}
-		return this.eServices[this.eServices.length-1].service;
+		else if (type == "e-link") {
+			newEService = Object.create(eLink);
+		} else if (type == "e-translation") {
+			newEService = Object.create(eTranslation);
+		} else if (type == "e-terminology") {
+			newEService = Object.create(eTerminology);
+		}
+
+		$.extend(newEService, eService);
+		newEService.createId();
+
+		newEService.createHtml();
+		this.eServices.push({type: type, service: newEService});
+
+		return newEService;
 	}
+
 };
 
 var inputArea = {
@@ -64,7 +63,7 @@ var eService = {
 			eService.idCounter = 0;
 		}
 
-		this.id = ++eService.idCounter;
+		this.id = eService.idCounter++;
 	},
 
 	// stores the nif of the enrichment when enrichment has been performed. NIF
@@ -106,7 +105,10 @@ var eService = {
 
 	// retrieve input - either from input area or from previous step
 	getInput : function() {
-		return inputArea.getInput();
+		if (this.id==0) {
+			return inputArea.getInput();
+		}
+		return { informat : "rdf-xml", input: fwm.eServices[this.id-1].nif};
 	},
 
 	output : function(data) {

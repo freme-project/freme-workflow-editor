@@ -2,21 +2,18 @@
  * Created by jonathan(jonathan.sauder@student.hpi.de on 2/25/16.
  */
 var createAnnotationsFromXml = function(xmlResponse,unique,collection){
-
 	var rdf = $.rdf().load(xmlResponse, {});
 	var datadump = rdf.databank.dump();
 	const MODE = { UNIQUE : 0, COLLECTION : 1};
-
 	var attr;
 	var mode;
 	annotations = [];
 	for (var annotation in datadump) {
+
 		if (datadump.hasOwnProperty(annotation)) {
 			var annoObj = {};
-
 			for (var predicate in datadump[annotation]) {
 				if (datadump[annotation].hasOwnProperty(predicate)) {
-
 					if (predicate.match(re("beginIndex"))) {
 						annoObj.beginIndex=parseInt(datadump[annotation][predicate][0].value);
 						continue;
@@ -69,7 +66,7 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 	return annotations;
 };
 
-var matchAnnotationsToString = function(str,annotations,generateTooltip) {
+var matchAnnotationsToString = function(str,annotations,generateTooltip,id) {
 	/*
 	 * Matches found annotations to String :
 	 * Adds <a href="#" class="tooltip" title="[Annotation - Description]"> [Annotation-Name] </a> in the text correctly
@@ -77,15 +74,13 @@ var matchAnnotationsToString = function(str,annotations,generateTooltip) {
 	annotations = resolveOffsetConflicts(annotations);
 
 	var i= 0;
-	var a, tooltip;
+	var a;
 
 	final="";
 	for (k=0; k<annotations.length;k++) {
 		a=annotations[k];
-		tooltip = generateTooltip(a);
-
 		final += str.substring(i, a.beginIndex);
-		final += "<a href=\"#\" class=\"tooltip\" title=\"" + tooltip + "\"  >" + str.substring(a.beginIndex, a.endIndex) + "</a>";
+		final +=  generateTooltip(a,str.substring(a.beginIndex, a.endIndex),id);
 		i = a.endIndex;
 	}
 
@@ -129,3 +124,4 @@ var resolveOffsetConflicts = function(annotations){
 	}
 	return annotations;
 };
+
