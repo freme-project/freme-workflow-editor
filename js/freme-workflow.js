@@ -17,18 +17,28 @@ var fwm = {
 	addEService : function(type) {
 
 		var newEService = null;
-		if (type == "e-entity") {
-			newEService = Object.create(eEntity);
+
+		if (this.eServices.length==0 || !(this.eServices[this.eServices.length-1].type == type)) {
+			if (type == "e-entity") {
+				newEService = Object.create(eEntity);
+			}
+			else if (type == "e-link") {
+				newEService = Object.create(eLink);
+			} else if (type == "e-translation"){
+				newEService = Object.create(eTranslation);
+			} else if (type == "e-terminology"){
+				newEService = Object.create(eTerminology);
+			}
+
+			$.extend(newEService, eService);
+			newEService.createId();
+
+			newEService.createHtml();
+			this.eServices.push({type: type, service: newEService});
+
+			return newEService;
 		}
-
-		$.extend(newEService, eService);
-		newEService.createId();
-
-		var html = newEService.createHtml();
-		this.eServices.push(newEService);
-		$("#enrichment-modules").append(html);
-
-		return newEService;
+		return this.eServices[this.eServices.length-1].service;
 	}
 };
 
@@ -90,9 +100,8 @@ var eService = {
 			var regex = new RegExp(key, "g");
 			html = html.replace(regex, value);
 		});
-
-
 		$("#enrichment-modules").append(html);
+
 	},
 
 	// retrieve input - either from input area or from previous step

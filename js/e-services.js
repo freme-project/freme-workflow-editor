@@ -72,3 +72,73 @@ var eEntity = {
         return tooltip;
     }
 };
+
+
+var eLink = {
+
+    createHtml : function() {
+        var data = {
+            "\\$id\\$" : this.id
+        };
+        this.loadStep("assets/html/e-link.html", data);
+
+        var that = this;
+        $("#enrich-" + this.id).click(function() {
+            that.doEnrichment();
+        });
+
+    },
+
+    doEnrichment : function() {
+    },
+
+    generateTooltipText : function(annotation) {
+        return "";
+    }
+};
+
+var eTranslation = {
+
+    createHtml : function() {
+        var data = {
+            "\\$id\\$" : this.id
+        };
+        this.loadStep("assets/html/e-translation.html", data);
+
+        var that = this;
+        $("#enrich-" + this.id).click(function() {
+            that.doEnrichment();
+        });
+
+    },
+
+    doEnrichment : function() {
+    },
+
+    generateTooltipText : function(annotation) {
+        return "";
+    }
+};
+
+var eTerminology = {
+
+    createHtml : function() {
+        var data = {
+            "\\$id\\$" : this.id
+        };
+        this.loadStep("assets/html/e-terminology.html", data);
+
+        var that = this;
+        $("#enrich-" + this.id).click(function() {
+            that.doEnrichment();
+        });
+
+    },
+
+    doEnrichment : function() {
+    },
+
+    generateTooltipText : function(annotation) {
+        return "";
+    }
+};
