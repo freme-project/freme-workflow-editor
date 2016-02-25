@@ -54,13 +54,13 @@ var eEntity = {
         var tooltip="";
         for (var i=0; i<eEntity.unique.length; i++) {
             if (annotation[eEntity.unique[i]]) {
-                tooltip+="&lt;p&gt;&lt;strong&gt;" + annotation[eEntity.unique[i]] + "&lt;/strong&gt;&lt;/p&gt;";
+                tooltip+="&lt;p&gt;&lt;strong&gt;" + eEntity.unique[i] + " : &lt;/strong&gt;"+ annotation[eEntity.unique[i]] + "&lt;/p&gt;";
             }
         }
 
        for (i=0; i<eEntity.collection.length; i++) {
            if (annotation[eEntity.collection[i]].length!=0) {
-                tooltip+="&lt;ul&gt;";
+                tooltip+="&lt;p&gt;&lt;strong&gt;"+ eEntity.collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
                for (var item in annotation[eEntity.collection[i]]) {
                    if (annotation[eEntity.collection[i]].hasOwnProperty(item)) {
                        tooltip += "&lt;li&gt;" + annotation[eEntity.collection[i]][item] + "&lt;/li&gt;";
