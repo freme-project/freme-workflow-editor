@@ -88,9 +88,8 @@ var matchAnnotationsToString = function(str,annotations,generateTooltip,id) {
 	var final="";
 	var appendix= "";
 	var tooltipObj = {};
-	for (k=0; k<annotations.length;k++) {
+	for (k=0; k<annotations.length-1;k++) {
 		a=annotations[k];
-
 		tooltipObj= generateTooltip(a, str. substring(a.beginIndex, a.endIndex),id);
 
 		final += str.substring(i, a.beginIndex);
@@ -98,9 +97,10 @@ var matchAnnotationsToString = function(str,annotations,generateTooltip,id) {
 		appendix+= tooltipObj.appendix;
 		i = a.endIndex;
 	}
-
 	final+=str.substring(i);
 	final+= appendix;
+
+
 	return final;
 };
 

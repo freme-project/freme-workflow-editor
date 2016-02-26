@@ -9,7 +9,7 @@ $(document).ready(function() {
 
 });
 
-var debug = true;
+var debug = false;
 var fwm = {
 
 	eServices : [],
@@ -46,7 +46,7 @@ var inputArea = {
 
 	getInput : function() {
 		return {
-			informat : informat = $("input[name=informat]").val(),
+			informat : informat = $("#input-informat").val(),
 			input : input = $("#input-area").val()
 		};
 	}
@@ -158,3 +158,6 @@ var processResponse = function(input,data,id,type) {
 	$("#output-"+id).html(service.display);
 	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true});
 };
+
+
+

@@ -49,6 +49,10 @@ var eEntity = {
 
 
     generateTooltipText : function(annotation,str,id) {
+        if (annotation.context) {
+            return {tooltip : "" , appendix : ""}
+        }
+
         var tooltip="<a href=\"#\" class=\"tooltip\" title=\"";
         for (var i=0; i<eEntity.unique.length; i++) {
 
@@ -169,5 +173,5 @@ var eTerminology = {
     }
 };
 
-var holdid;
+
 
