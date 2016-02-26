@@ -38,22 +38,12 @@ var eEntity = {
             'xml')
             .done(function(data) {
 
-                fwm.eServices[that.id].nif=xmlToString(data);
-                fwm.eServices[that.id].annotations=createAnnotationsFromXml(data,eEntity.unique,eEntity.collection);
-                fwm.eServices[that.id].display=matchAnnotationsToString(
-                    input.input,
-                    fwm.eServices[that.id].annotations.slice(0,-1),
-                    that.generateTooltipText,that.id);
-
-                $("#output-"+that.id).html(fwm.eServices[that.id].display);
-                $(".tooltip").tooltipster({contentAsHTML:true});
-
-
-
-
+                processResponse(input,data,that.id,eEntity)
 
             })
-            .fail(function() { alert("error"); })
+            .fail(function(data) {
+                exceptionToDialog(data);
+            })
             .always(function() {});
     },
 
@@ -139,21 +129,11 @@ var eTranslation = {
             function() {},
             'xml')
             .done(function(data) {
-
-
-
-                fwm.eServices[that.id].nif=xmlToString(data);
-                fwm.eServices[that.id].annotations=createAnnotationsFromXml(data,eTranslation.unique,eTranslation.collection);
-                fwm.eServices[that.id].display=matchAnnotationsToString(
-                    input.input,
-                    fwm.eServices[that.id].annotations,
-                    that.generateTooltipText,that.id);
-
-                $("#output-"+that.id).html(fwm.eServices[that.id].display);
-                $(".tooltip").tooltipster({contentAsHTML:true});
-
+                processResponse(input,data,that.id,eTranslation)
             })
-            .fail(function(data) { alert("asdf"+ JSON.parse(data)); })
+            .fail(function(data) {
+                exceptionToDialog(data);
+            })
             .always(function() {});
     },
 

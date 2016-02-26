@@ -9,7 +9,7 @@ $(document).ready(function() {
 
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
@@ -140,3 +140,21 @@ var xmlToString = function(xmlData) {
 	return xmlString;
 };
 
+
+var exceptionToDialog = function(data){
+	$("#jquery-ui-dialog").html(data.responseText.replace(/\"/g," ").replace(/{/g,"").replace(/}/g,"").replace(/,/g,"<br>"));
+	$("#jquery-ui-dialog").dialog("open");
+};
+
+var processResponse = function(input,data,id,type) {
+	var service = fwm.eServices[id];
+	service.nif=xmlToString(data);
+	service.input=input;
+	service.annotations=createAnnotationsFromXml(data,type.unique,type.collection);
+	service.display=matchAnnotationsToString(
+		service.input.input,
+		service.annotations,
+		type.generateTooltipText,id);
+	$("#output-"+id).html(service.display);
+	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true});
+};
