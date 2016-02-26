@@ -43,6 +43,7 @@ var loadExample = function(){
         case "text/html":text=exampleTextHolder.html;
             break
     }
+    console.log(choice,text);
     $("#input-area").text(text);
     $("#input-informat").val(choice);
 

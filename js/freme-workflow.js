@@ -2,9 +2,10 @@ $(document).ready(function() {
 
 	if (debug) {
 		console.log("DEBUG!!!");
-		fwm.addEService("e-entity").doEnrichment();
-		setTimeout(function(){fwm.addEService("e-translation").doEnrichment()},500);
-		setTimeout(function(){fwm.addEService("e-entity").doEnrichment()},4000);
+		loadExample();
+		fwm.addEService("e-translation").doEnrichment();
+		setTimeout(function(){fwm.addEService("e-translation").doEnrichment()},3500);
+		/*setTimeout(function(){fwm.addEService("e-entity").doEnrichment()},4000);*/
 	}
 
 });
@@ -46,8 +47,8 @@ var inputArea = {
 
 	getInput : function() {
 		return {
-			informat : informat = $("#input-informat").val(),
-			input : input = $("#input-area").val()
+			informat : $("#input-informat").val(),
+			input :  $("#input-area").val()
 		};
 	}
 };
@@ -110,12 +111,9 @@ var eService = {
 			return inputArea.getInput();
 		}
 		return { informat : "rdf-xml", input: fwm.eServices[this.id-1].nif};
-	},
-
-	output : function(data) {
-
-
 	}
+
+
 };
 
 
@@ -142,8 +140,8 @@ var xmlToString = function(xmlData) {
 
 
 var exceptionToDialog = function(data){
-	$("#jquery-ui-dialog").html(data.responseText.replace(/\"/g," ").replace(/{/g,"").replace(/}/g,"").replace(/,/g,"<br>"));
-	$("#jquery-ui-dialog").dialog("open");
+	$("#jquery-ui-dialog").html(data.responseText.replace(/\\\"/g,"''").replace(/\"/g," ").replace(/{/g,"").replace(/}/g,"").replace(/,/g,"<br>"))
+	.dialog("open");
 };
 
 var processResponse = function(input,data,id,type) {

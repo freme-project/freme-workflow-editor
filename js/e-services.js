@@ -24,20 +24,19 @@ var eEntity = {
 
     doEnrichment : function() {
         var input = this.getInput();
-        var variables = "?informat=" + input.informat;
+        var variables = "?informat=" + encodeURIComponent(input.informat);
         variables += "&outformat=rdf-xml";
         variables += "&dataset=" + $("#dataset-" + this.id).val();
         variables += "&language=" + $("#language-" + this.id).val();
         variables += "&mode=" + $("#mode-" + this.id).val();
         var that = this;
-
+        console.log(input.input);
         $.post(
-                fwm.fremeApi + "/e-entity/freme-ner/documents" + variables,
-            {"input": input.input},
+            fwm.fremeApi + "/e-entity/freme-ner/documents" + variables,
+            {input : input.input},
             function() {},
             'xml')
             .done(function(data) {
-
                 processResponse(input,data,that.id,eEntity)
 
             })
@@ -121,24 +120,22 @@ var eTranslation = {
 
     doEnrichment : function() {
         var input = this.getInput();
-        var variables = "?informat=" + input.informat;
+        var variables = "?informat=" + encodeURIComponent(input.informat);
         variables += "&outformat=rdf-xml";
         variables += "&source-lang=" + $("#source-lang-" + this.id).val();
         variables += "&target-lang=" + $("#target-lang-" + this.id).val();
         var that = this;
+        console.log(input.input);
 
-        $.post(
-                fwm.fremeApi + "/e-translation/tilde" + variables,
-            {"input": input.input},
-            function() {},
-            'xml')
-            .done(function(data) {
-                processResponse(input,data,that.id,eTranslation)
-            })
-            .fail(function(data) {
-                exceptionToDialog(data);
-            })
-            .always(function() {});
+        $.ajax({
+                type:"POST",
+                url:fwm.fremeApi + "/e-translation/tilde" +variables,
+                data: {input: input.input},
+                success: function(data){processResponse(input,data,that.id,eTranslation)},
+                error: function(data){exceptionToDialog(data)},
+                dataType: "xml"
+            });
+
     },
 
     generateTooltipText : function(annotation,str,id) {
