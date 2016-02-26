@@ -4,8 +4,8 @@
 
 var eEntity = {
 
-    unique : ["anchorOf","taIdentRef","taConfidence"],
-    collection :["taClassRef"],
+    unique : ["anchorOf","taIdentRef","taConfidence","isString"],
+    collection :["target","taClassRef"],
 
     createHtml : function() {
         var data = {
@@ -39,9 +39,18 @@ var eEntity = {
             .done(function(data) {
 
                 fwm.eServices[that.id].nif=xmlToString(data);
-                var annotations = createAnnotationsFromXml(data,eEntity.unique,eEntity.collection);
-                $("#output-"+that.id).html(matchAnnotationsToString(input.input,annotations,that.generateTooltipText,that.id));
+                fwm.eServices[that.id].annotations=createAnnotationsFromXml(data,eEntity.unique,eEntity.collection);
+                fwm.eServices[that.id].display=matchAnnotationsToString(
+                    input.input,
+                    fwm.eServices[that.id].annotations.slice(0,-1),
+                    that.generateTooltipText,that.id);
+
+                $("#output-"+that.id).html(fwm.eServices[that.id].display);
                 $(".tooltip").tooltipster({contentAsHTML:true});
+
+
+
+
 
             })
             .fail(function() { alert("error"); })
@@ -52,14 +61,16 @@ var eEntity = {
     generateTooltipText : function(annotation,str,id) {
         var tooltip="<a href=\"#\" class=\"tooltip\" title=\"";
         for (var i=0; i<eEntity.unique.length; i++) {
+
             if (annotation[eEntity.unique[i]]) {
                 tooltip+="&lt;p&gt;&lt;strong&gt;" + eEntity.unique[i] + " : &lt;/strong&gt;"+ annotation[eEntity.unique[i]] + "&lt;/p&gt;";
             }
         }
 
        for (i=0; i<eEntity.collection.length; i++) {
-           if (annotation[eEntity.collection[i]].length!=0) {
-                    tooltip+="&lt;p&gt;&lt;strong&gt;"+ eEntity.collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
+
+           if (annotation[eEntity.collection[i]]) {
+               tooltip+="&lt;p&gt;&lt;strong&gt;"+ eEntity.collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
                for (var item in annotation[eEntity.collection[i]]) {
                    if (annotation[eEntity.collection[i]].hasOwnProperty(item)) {
                        tooltip += "&lt;li&gt;" + annotation[eEntity.collection[i]][item] + "&lt;/li&gt;";
@@ -68,7 +79,7 @@ var eEntity = {
                tooltip+="&lt;/ul&gt;";
            }
        }
-        return tooltip + "\"> " + str + "</a>" ;
+        return {tooltip : tooltip + "\"> " + str + "</a>" , appendix : ""} ;
     }
 };
 
@@ -98,8 +109,8 @@ var eLink = {
 var eTranslation = {
 
 
-    unique: ["target"],
-    collection: [],
+    unique: ["isString"],
+    collection: ["target"],
 
     createHtml : function() {
         var data = {
@@ -128,10 +139,17 @@ var eTranslation = {
             function() {},
             'xml')
             .done(function(data) {
-                fwm.eServices[that.id].nif=xmlToString(data);
 
-                var annotations = createAnnotationsFromXml(data,eTranslation.unique,eTranslation.collection);
-                $("#output-"+that.id).html(matchAnnotationsToString(input.input ,annotations,that.generateTooltipText,that.id));
+
+
+                fwm.eServices[that.id].nif=xmlToString(data);
+                fwm.eServices[that.id].annotations=createAnnotationsFromXml(data,eTranslation.unique,eTranslation.collection);
+                fwm.eServices[that.id].display=matchAnnotationsToString(
+                    input.input,
+                    fwm.eServices[that.id].annotations,
+                    that.generateTooltipText,that.id);
+
+                $("#output-"+that.id).html(fwm.eServices[that.id].display);
                 $(".tooltip").tooltipster({contentAsHTML:true});
 
             })
@@ -140,7 +158,11 @@ var eTranslation = {
     },
 
     generateTooltipText : function(annotation,str,id) {
-        return str+ "<br><br><strong>Translation to:</strong><p>" +  $("#target-lang-" + id).val()+ "</p>" +  annotation.target;
+        var appendix="";
+        for (var i =0; i<annotation.target.length; i++ ) {
+            appendix+="<br><br><strong>Translation to:</strong><p>" +  $("#target-lang-" + id).val()+ "</p>" +  annotation.target[i];
+        }
+        return {tooltip : str, appendix : appendix} ;
     }
 };
 
@@ -168,3 +190,4 @@ var eTerminology = {
 };
 
 var holdid;
+

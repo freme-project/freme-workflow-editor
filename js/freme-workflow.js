@@ -1,9 +1,10 @@
 $(document).ready(function() {
 
 	if (debug) {
-		console.log("DEBUG!!!")
+		console.log("DEBUG!!!");
 		fwm.addEService("e-entity").doEnrichment();
-		fwm.addEService("e-translation");
+		setTimeout(function(){fwm.addEService("e-translation").doEnrichment()},500);
+		setTimeout(function(){fwm.addEService("e-entity").doEnrichment()},4000);
 	}
 
 });

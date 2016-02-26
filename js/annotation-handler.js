@@ -8,6 +8,9 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 	var attr;
 	var mode;
 	annotations = [];
+
+
+
 	for (var annotation in datadump) {
 
 		if (datadump.hasOwnProperty(annotation)) {
@@ -31,7 +34,7 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 							break;
 						}
 					}
-					if (mode !== MODE.UNIQUE) {
+					if (mode != MODE.UNIQUE) {
 						for (i = 0; i < collection.length; i++) {
 							if (predicate.match(re(collection[i]))) {
 								mode = MODE.COLLECTION;
@@ -40,7 +43,10 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 							}
 						}
 					}
+
 					annoObj[attr] = [];
+
+
 					for (var value in datadump[annotation][predicate]) {
 						if (datadump[annotation][predicate].hasOwnProperty(value)) {
 
@@ -49,6 +55,10 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 								annoObj[attr] = val;
 							} else if (mode === MODE.COLLECTION) {
 								annoObj[attr].push(val);
+							}
+							if (predicate.match(re("type")) && val.match(re("Context"))){
+								annoObj.context=true;
+                                annoObj.hasRelevance=true;
 							}
 							if (attr!="unknown"){
 								annoObj.hasRelevance=true;
@@ -63,7 +73,7 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 			annotations.push(annoObj);
 		}
 	}
-	return annotations;
+	return resolveOffsetConflicts(annotations);
 };
 
 var matchAnnotationsToString = function(str,annotations,generateTooltip,id) {
@@ -71,20 +81,26 @@ var matchAnnotationsToString = function(str,annotations,generateTooltip,id) {
 	 * Matches found annotations to String :
 	 * Adds <a href="#" class="tooltip" title="[Annotation - Description]"> [Annotation-Name] </a> in the text correctly
 	 */
-	annotations = resolveOffsetConflicts(annotations);
 
 	var i= 0;
 	var a;
 
-	final="";
+	var final="";
+	var appendix= "";
+	var tooltipObj = {};
 	for (k=0; k<annotations.length;k++) {
 		a=annotations[k];
+
+		tooltipObj= generateTooltip(a, str. substring(a.beginIndex, a.endIndex),id);
+
 		final += str.substring(i, a.beginIndex);
-		final +=  generateTooltip(a,str.substring(a.beginIndex, a.endIndex),id);
+		final += tooltipObj.tooltip;
+		appendix+= tooltipObj.appendix;
 		i = a.endIndex;
 	}
 
 	final+=str.substring(i);
+	final+= appendix;
 	return final;
 };
 
@@ -93,15 +109,25 @@ var resolveOffsetConflicts = function(annotations){
 	/*
 	 * 1) Sorts array of annotations by their offsets;
 	 * 2) Eliminates any ambiguity in offsets and makes sure no annotations overlap each other
+	 * NOTE: The last element of the returned array of annotations will always be the context, with beginIndex=0 and endIndex=input.input.length!!!
 	*/
 	function compareOffset(a,b){
+		if (a.context) {
+			return -9999;
+		}
+		if (b.context) {
+			return 9999;
+		}
 		var diff = a.beginIndex-b.beginIndex;
 		if (diff === 0) {
 			return a.endIndex- b.endIndex;
 		}
 		return diff;
 	}
+
 	annotations.sort(compareOffset);
+	var context = annotations[0];
+	annotations = annotations.slice(1);
 	if (annotations.length>1) {
 		for (var k=0; k<annotations.length-1; k++) {
 			if (annotations[k].endIndex>=annotations[k+1].beginIndex) {
@@ -122,6 +148,7 @@ var resolveOffsetConflicts = function(annotations){
 			}
 		}
 	}
+	annotations.push(context);
 	return annotations;
 };
 
