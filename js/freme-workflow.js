@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	loadExample();
 
 	if (debug) {
 		console.log("DEBUG!!!");
@@ -39,6 +40,12 @@ var fwm = {
 		this.eServices.push({type: type, service: newEService});
 
 		return newEService;
+	},
+
+	removeEService: function(id) {
+		console.log("step"+id);
+
+		$("#step"+id).remove();
 	}
 
 };
@@ -105,6 +112,7 @@ var eService = {
 
 	},
 
+
 	// retrieve input - either from input area or from previous step
 	getInput : function() {
 		if (this.id==0) {
@@ -112,11 +120,7 @@ var eService = {
 		}
 		return { informat : "rdf-xml", input: fwm.eServices[this.id-1].nif};
 	}
-
-
 };
-
-
 
 
 var re =  function(name){

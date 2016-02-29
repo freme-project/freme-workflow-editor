@@ -115,7 +115,6 @@ var eTranslation = {
         $("#enrich-" + this.id).click(function() {
             that.doEnrichment();
         });
-
     },
 
     doEnrichment : function() {
