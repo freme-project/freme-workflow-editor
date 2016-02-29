@@ -11,9 +11,7 @@ var createAnnotationsFromXml = function(xmlResponse){
 	annotations = [];
 
 
-	console.log(datadump);
 	for (var annotation in datadump) {
-
 		if (datadump.hasOwnProperty(annotation)) {
 			var annoObj = {};
 			for (var predicate in datadump[annotation]) {
