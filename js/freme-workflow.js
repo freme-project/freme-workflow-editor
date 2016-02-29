@@ -43,8 +43,7 @@ var fwm = {
 	},
 
 	removeEService: function(id) {
-		console.log("step"+id);
-
+		this.eServices[parseInt(id)]={type : "deleted", service: null};
 		$("#step"+id).remove();
 	}
 
@@ -118,7 +117,14 @@ var eService = {
 		if (this.id==0) {
 			return inputArea.getInput();
 		}
-		return { informat : "rdf-xml", input: fwm.eServices[this.id-1].nif};
+		var i=0;
+		while(fwm.eServices[this.id-1-i].type=="deleted"){
+			i+=1
+			if (this.id-i==0) {
+				return inputArea.getInput();
+			}
+		}
+		return { informat : "rdf-xml", input: fwm.eServices[this.id-1-i].nif}
 	}
 };
 
