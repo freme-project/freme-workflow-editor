@@ -1,12 +1,14 @@
 <html>
 <head>
+
+	<link rel="stylesheet" href="css/style.css">
 	<meta charset="utf-8">
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<link rel="stylesheet" 	href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<link rel="stylesheet" href="./style.css">
-	<link rel="stylesheet" type="text/css" href="css/tooltipster.css" />
-	<script type="text/javascript" src="js/jquery.tooltipster.min.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="design/css/tooltipster.css" />
+	<script type="text/javascript" src="design/js/jquery.tooltipster.min.js"></script>
 	<script type="text/javascript" src="js/freme-workflow.js"></script>
 	<script type="text/javascript" src="js/load-example.js"></script>
 	<script type="text/javascript" src="js/e-services.js"></script>
@@ -33,128 +35,156 @@
 
 </head>
 <body>
-	<h1>FREME Workflow Editor</h1>
+<div id="page-content">
 	<div id="jquery-ui-dialog" title = "An Error Occurred"><p>Some text</p></div>
-	<div style="width: 600px">
+	<!-- <h1>FREME Workflow Editor</h1> -->
+	<!-- <div style="float:left; display:block;" class="top-header">
+	PROVA
+	</div>
+	<div style="float:left; display:block;" class="top-header">
+	FREME Workflow Editor
+	</div>
+	<div style="clear:both;"></div>-->
+	<div class="top-header">
+		<img src="img/Logo_FREME_WorkFlow_Editor_800px.png" alt="Logo FREME Workflow Editor" style="max-width:100%">
+	</div>
+	<div class="top-header-description">
+		<p><strong>GETTING STARTED WITH THE FREME WORKFLOW EDITOR</strong></p>
+		<p style="font-size: 13px">Please follow these steps to set up your workflow and test available features of the FREME open framework of e-Services.</p>
+			<img src="img/step_1.png" alt="Logo FREME Workflow Editor" style="width:400px; padding:10px;">
+			<img src="img/step_2.png" alt="Logo FREME Workflow Editor" style="width:400px; padding:10px;">
+			<img src="img/step_3.png" alt="Logo FREME Workflow Editor" style="width:400px; padding:10px;">
+	</div>	
+	<div id="container" class="centered">
+
 		<div class="step">
+		
+
 			<div class="inner-box">
-				<h2>Input text</h2>
-				<textarea rows="15" style="width: 100%" id="input-area">Berlin is the capital of Germany and one of the 16 states of Germany. With a population of 3.5 million people, it is the second most populous city proper and the seventh most populous urban area in the European Union. Located in northeastern Germany on the banks of Rivers Spree and Havel, it is the centre of the Berlin-Brandenburg Metropolitan Region, which has about six million residents from over 180 nations. Due to its location in the European Plain, Berlin is influenced by a temperate seasonal climate. Around one-third of the city's area is composed of forests, parks, gardens, rivers and lakes.</textarea>
-				<!--<textarea rows="15" style="width: 100%" id="input-area">Berlin is the capital of Germany.</textarea>-->
-				<br />
-				<table>
+				<p class="box-title"><strong>INPUT TEXT</strong><p>
+				<textarea id="input-area" class="box-text" rows="15" style="width: 100%">Berlin is the capital of Germany and one of the 16 states of Germany. With a population of 3.5 million people, it is the second most populous city proper and the seventh most populous urban area in the European Union. Located in northeastern Germany on the banks of Rivers Spree and Havel, it is the centre of the Berlin-Brandenburg Metropolitan Region, which has about six million residents from over 180 nations. Due to its location in the European Plain, Berlin is influenced by a temperate seasonal climate. Around one-third of the city's area is composed of forests, parks, gardens, rivers and lakes.</textarea>
+				<br/>
+				<table style="margin-left:10px">
 					<tr>
-						<td>Use Example</td>
+						<td class = "label-dropdown" >Use Example</td>
 						<td><select id = "loadExampleChoice">
-								<option value="text">Plaintext</option>
-								<option value="application/x-xliff+xml">XLIFF 1.2</option>
-								<option value="text/html">HTML5</option>
+							<option value="text">Plaintext</option>
+							<option value="application/x-xliff+xml">XLIFF 1.2</option>
+							<option value="text/html">HTML5</option>
 						</select></td>
 						<td><button onclick="loadExample()">Load</button></td>
 					</tr>
 					<tr>
-						<td>Specify input format</td>
+						<td class = "label-dropdown">Specify input format</td>
 						<td><select id ="input-informat">
-								<option value="text">Plaintext</option>
-								<option value="turtle">Turtle</option>
-								<option value="json-ld">JSON-LD</option>
-								<option value="application/x-xliff+xml">XLIFF 1.2</option>
-								<option value="application/x-openoffice">Open document type</option>
-								<option value="text/html">HTML5</option>
-								<option value="rdf-xml">RDF-XML</option>
+							<option value="text">Plaintext</option>
+							<option value="turtle">Turtle</option>
+							<option value="json-ld">JSON-LD</option>
+							<option value="application/x-xliff+xml">XLIFF 1.2</option>
+							<option value="application/x-openoffice">Open document type</option>
+							<option value="text/html">HTML5</option>
+							<option value="rdf-xml">RDF-XML</option>
 						</select></td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		
 		<div id="enrichment-modules"></div>
-		
-		
-		
-		<!-- 
+		<!--
+    <div class="step">
+     <a id="closing-box" style="float: right" href="#">[X]</a>
+        <a id="closing-box" style="float: right" href="#"><img src="../img/close_icon.png" alt="Close"></a>
+        <div class="inner-box">
+            <p id="box-title"><strong>E-ENTITY</strong><p>
+            <p id="box-text">/e-entity/freme-ner/documents</p>
+            <p id="box-text">Perform named entity recognition using various datasets.</p>
+            <table style="margin-left:10px">
+                <tr>
+                    <td id="label-dropdown">dataset</td>
+                    <td><select>
+                            <option>dbpedia</option>
+                            <option>geonames</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td id="label-dropdown">language</td>
+                    <td><select>
+                            <option>en</option>
+                            <option>de</option>
+                            <option>fr</option>
+                            <option>it</option>
+                    </select></td>
+                </tr>
+            </table>
+            <br />
+            <button id="box-button">Enrich</button>
+        </div>
+
+        <div class="inner-box">
+            <div style="width: 100%; text-align: right;">
+                <a id="closing-box" href="#">[Show NIF]</a>
+            </div>
+            <p id="box-text">
+            <a href="#" class="tooltip"
+                title="&lt;strong&gt;Named Entity: Berlin&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Berlin&lt;/ul&gt;Confidence Score: 0.84">Berlin</a>
+            is the capital of <a href="#" class="tooltip"
+                title="&lt;strong&gt;Named Entity: Germany&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Germany&lt;/ul&gt;Confidence Score: 0.94">Germany</a>
+            and one of the 16 states of <a href="#" class="tooltip"
+                title="&lt;strong&gt;Named Entity: Germany&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Germany&lt;/ul&gt;Confidence Score: 0.94">Germany</a>.
+            With a population of 3.5 million people, it is the second most
+            populous city proper and the seventh most populous urban area in the
+            European Union. Located in northeastern Germany on the banks of
+            Rivers Spree and Havel, it is the centre of the Berlin-Brandenburg
+            Metropolitan Region, which has about six million residents from over
+            180 nations. Due to its location in the European Plain, <a href="#"
+                class="tooltip"
+                title="&lt;strong&gt;Named Entity: Berlin&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Berlin&lt;/ul&gt;Confidence Score: 0.84">Berlin</a>
+            is influenced by a temperate seasonal climate. Around one-third of
+            the city's area is composed of forests, parks, gardens, rivers and
+            lakes.
+            </p>
+        </div>
+    </div>
+    -->
 		<div class="step">
-			<a style="float: right" href="#">[x]</a>
-
 			<div class="inner-box">
-				<h2>e-Entity</h2>
-				<p>/e-entity/freme-ner/documents</p>
-				<p>Perform named entity recognition using various datasets.</p>
-				<table>
-					<tr>
-						<td>dataset</td>
-						<td><select>
-								<option>dbpedia</option>
-								<option>geonames</option>
-						</select></td>
-					</tr>
-					<tr>
-						<td>language</td>
-						<td><select>
-								<option>en</option>
-								<option>de</option>
-								<option>fr</option>
-								<option>it</option>
-						</select></td>
-					</tr>
-				</table>
-				<br />
-				<button>Enrich</button>
-			</div>
-
-			<div class="inner-box">
-				<div style="width: 100%; text-align: right">
-					<a href="#">[Show NIF]</a>
-				</div>
-				<br /> <a href="#" class="tooltip"
-					title="&lt;strong&gt;Named Entity: Berlin&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Berlin&lt;/ul&gt;Confidence Score: 0.84">Berlin</a>
-				is the capital of <a href="#" class="tooltip"
-					title="&lt;strong&gt;Named Entity: Germany&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Germany&lt;/ul&gt;Confidence Score: 0.94">Germany</a>
-				and one of the 16 states of <a href="#" class="tooltip"
-					title="&lt;strong&gt;Named Entity: Germany&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Germany&lt;/ul&gt;Confidence Score: 0.94">Germany</a>.
-				With a population of 3.5 million people, it is the second most
-				populous city proper and the seventh most populous urban area in the
-				European Union. Located in northeastern Germany on the banks of
-				Rivers Spree and Havel, it is the centre of the Berlin-Brandenburg
-				Metropolitan Region, which has about six million residents from over
-				180 nations. Due to its location in the European Plain, <a href="#"
-					class="tooltip"
-					title="&lt;strong&gt;Named Entity: Berlin&lt;/strong&gt;&lt;br/&gt;&lt;br/&gt;Entity classes&lt;ul&gt;&lt;li&gt;http://dbpedia.org/ontology/Location&lt;li&gt;http://dbpedia.org/ontology/PopulatedPlace&lt;li&gt;http://nerd.eurecom.fr/ontology#Location&lt;li&gt;http://dbpedia.org/ontology/Country&lt;li&gt;http://dbpedia.org/ontology/Place&lt;/ul&gt;Entity links&lt;ul&gt;&lt;li&gt;http://dbpedia.org/resource/Berlin&lt;/ul&gt;Confidence Score: 0.84">Berlin</a>
-				is influenced by a temperate seasonal climate. Around one-third of
-				the city's area is composed of forests, parks, gardens, rivers and
-				lakes.
+				<p class="box-title"><strong>ADD E-SERVICE</strong><p>
+				<button class="service-entry" onclick="fwm.addEService('e-entity')">e-Entity</button><br />
+				<button  class="service-entry" onclick="fwm.addEService('e-link')">e-Link</button><br />
+				<button  class="service-entry" onclick="fwm.addEService('e-terminology')">e-Terminology</button><br />
+				<button  class="service-entry" onclick="fwm.addEService('e-translation')">e-Translation</button><br />
 			</div>
 		</div>
- -->
-		<div class="step">
-			<div class="inner-box">
-				<h2>Add e-Service</h2>
-				<button onclick="fwm.addEService('e-entity')">e-Entity</button><br />
-				<button onclick="fwm.addEService('e-link')">e-Link</button><br />
-				<button onclick="fwm.addEService('e-terminology')">e-Terminology</button><br />
-				<button onclick="fwm.addEService('e-translation')">e-Translation</button><br />
-			</div>
-		</div>
 
 		<div class="step">
 			<div class="inner-box">
-				<h2>Apply filter</h2>
-				Use a filter to simplify the output <select>
+				<p class="box-title"><strong>APPLY FILTER</strong><p>
+				<p class="box-text">Use a filter to simplify the output</p>
+				<table style="margin-left:10px">
+					<td class = "label-dropdown">Filter</td>
+						<td><select>
 					<option>terminology-terms-only</option>
 					<option>terms-only</option>
-				</select>
-
-				<button>Apply filter</button>
+				</select></td>
+					</tr>
+				</table>
+				<br>
+				<button id="box-button">Apply filter</button>
 			</div>
-<!--
+			
 			<div class="inner-box">
-				<h2>Filter "entities only"</h2>
-				<ul>
+				<p class="box-title"><strong>FILTER "ENTITIES ONLY"</strong><p>
+				<ul class="bullet-list">
 					<li>Berlin
 					<li>Germany
 				</ul>
-			</div>-->
+			</div>
 		</div>
+	</div>
+	<div class="bottom-footer">
+		<img src="img/flag_yellow_high-272x182.jpg" alt="Logo European commission" style="width:60px; height:40px;">
+		<p>Co-funded by the EC under the H2020 Framework Programme for Research and Innovation | Grant agreement number 644771</p>
+	</div>
 	</div>
 </body>
 </html>

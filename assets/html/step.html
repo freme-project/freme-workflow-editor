@@ -1,12 +1,15 @@
 <div class="step" id="step$id$">
-	<a style="float: right" href="#">[x]</a>
+
+	<img class="closing-box" src="img/close_icon.png" style="float: right" onclick="alert('CLICK')">
 
 	<div class="inner-box">$controls$</div>
 
 	<div class="inner-box">
 		<div style="width: 100%; text-align: left" id="innerbox-$id$">
-			<a href="#">[Show NIF]</a>
-			<div id="output-$id$"></div>
+			<div style="text-align: right">
+				<a class="closing-box" href="#">[Show NIF]</a>
+			</div>
+			<div class="box-text" id="output-$id$"></div>
 		</div>
 	</div>
 
