@@ -94,23 +94,17 @@ var matchAnnotationsToString = function(annotations) {
 
 	var i= 0;
 	var a;
-	var str=annotations[annotations.length-1].isString;
+	var context = annotations[annotations.length-1];
+	var str=context.isString;
 	var final="";
-	var appendix= "";
-	for (k=0; k<annotations.length;k++) {
+	for (k=0; k<annotations.length-1;k++) {
 		a=annotations[k];
-		if (a.context) {
-			appendix += generateAppendix(a);
-		}
-		if (!a.context) {
-			final += str.substring(i, a.beginIndex);
-			final += generateTooltip(a,str.substring(a.beginIndex, a.endIndex));
-			i = a.endIndex;
-		}
-
+		final += str.substring(i, a.beginIndex);
+		final += generateTooltip(a,str.substring(a.beginIndex, a.endIndex));
+		i = a.endIndex;
 	}
 	final+=str.substring(i);
-	final+= appendix;
+	final+=generateAppendix(context);
 
 
 	return final;
