@@ -50,6 +50,22 @@ var eLink = {
     },
 
     doEnrichment : function() {
+        var input = this.getInput();
+        var variables = "?informat=" + encodeURIComponent(input.informat);
+        variables += "&outformat=rdf-xml";
+        variables += "&templateid=" + $("#template-" + this.id).val();
+        var that = this;
+
+        $.ajax({
+            type:"POST",
+            url:fwm.fremeApi + "/e-link/documents" +variables,
+            data: input.input,//{input:   input.input,//},
+            contentType: input.informat,
+            success: function(data){processResponse(data,that.id)},
+            error: function(data){exceptionToDialog(data)},
+            dataType: "xml"
+        });
+
     },
 
 };
