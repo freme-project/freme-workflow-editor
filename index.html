@@ -57,7 +57,7 @@
 					<tr>
 						<td class = "label-dropdown" >Use Example</td>
 						<td><select id = "loadExampleChoice">
-							<option value="text">Plaintext</option>
+							<option value="text/plain">Plaintext</option>
 							<option value="application/x-xliff+xml">XLIFF 1.2</option>
 							<option value="text/html">HTML5</option>
 						</select></td>
@@ -66,13 +66,13 @@
 					<tr>
 						<td class = "label-dropdown">Specify input format</td>
 						<td><select id ="input-informat">
-							<option value="text">Plaintext</option>
+							<option value="text/plain">Plaintext</option>
 							<option value="turtle">Turtle</option>
 							<option value="json-ld">JSON-LD</option>
 							<option value="application/x-xliff+xml">XLIFF 1.2</option>
 							<option value="application/x-openoffice">Open document type</option>
 							<option value="text/html">HTML5</option>
-							<option value="rdf-xml">RDF-XML</option>
+							<option value="application/rdf+xml">RDF-XML</option>
 						</select></td>
 					</tr>
 				</table>
@@ -105,7 +105,7 @@
 					</tr>
 				</table>
 				<br>
-				<button id="box-button">Apply filter</button>
+				<button class="service-entry" id="box-button">Apply filter</button>
 			</div>
 			
 			<div class="inner-box">

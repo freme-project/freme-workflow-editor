@@ -8,7 +8,7 @@ var exampleTextHolder = {
     "<head></head>\n" +
     "<body>\n" +
     "<p>" +
-    "Cheddar is the most popular type of cheese in the UK, accounting for 51% of the country's £1.9 billion annual cheese market. It is also the second-most-popular cheese in the US (behind mozzarella), with an average annual consumption of 10 lb (4.5 kg) per capita. The United States produced approximately 3,000,000,000 lb (1,300,000 long tons; 1,400,000 tonnes) in 2014,[4] and the UK 258,000 long tons (262,000 tonnes) in 2008. " +
+    "Cheddar is the most popular type of cheese in the United Kingdom, accounting for 51% of the country's £1.9 billion annual cheese market. It is also the second most popular cheese in the US (behind mozzarella), with an average annual consumption of 10 lb (4.5 kg) per capita. The United States produced approximately 3,000,000,000 lb (1,300,000 long tons; 1,400,000 tonnes) in 2014,[4] and theUnited Kingdom 258,000 long tons (262,000 tonnes) in 2008. " +
     "</p>\n" +
     "<p>" +
     "The term \"Cheddar cheese\" is widely used, but has no Protected Designation of Origin within the European Union, although only Cheddar produced from local milk within four counties of south west England may use the name \"West Country Farmhouse Cheddar\"." +
@@ -36,7 +36,7 @@ var loadExample = function(){
     var choice = $("#loadExampleChoice").val();
     var text;
     switch(choice){
-        case "text": text=exampleTextHolder.text;
+        case "text/plain": text=exampleTextHolder.text;
             break;
         case "application/x-xliff+xml":text=exampleTextHolder.xliff;
             break;
@@ -49,3 +49,5 @@ var loadExample = function(){
     $("#input-informat").val(choice);
 
 };
+
+

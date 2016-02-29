@@ -3,15 +3,14 @@ $(document).ready(function() {
 
 	if (debug) {
 		console.log("DEBUG!!!");
-		loadExample();
-		fwm.addEService("e-translation").doEnrichment();
-		setTimeout(function(){fwm.addEService("e-translation").doEnrichment()},3500);
-		/*setTimeout(function(){fwm.addEService("e-entity").doEnrichment()},4000);*/
+		fwm.addEService("e-translation");
+		fwm.addEService("e-entity");
+		fwm.addEService("e-translation");
+		$("#target-lang-2").val("nl")
 	}
-
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
@@ -124,7 +123,7 @@ var eService = {
 				return inputArea.getInput();
 			}
 		}
-		return { informat : "rdf-xml", input: fwm.eServices[this.id-1-i].nif}
+		return { informat : "application/rdf+xml", input: fwm.eServices[this.id-1-i].nif}
 	}
 };
 
@@ -154,16 +153,11 @@ var exceptionToDialog = function(data){
 	.dialog("open");
 };
 
-var processResponse = function(input,data,id,type) {
+var processResponse = function(data,id) {
 	var service = fwm.eServices[id];
 	service.nif=xmlToString(data);
-	service.input=input;
-	service.annotations=createAnnotationsFromXml(data,type.unique,type.collection);
-	service.display=matchAnnotationsToString(
-		service.input.input,
-		service.annotations,
-		type.generateTooltipText,id);
-	$("#output-"+id).html(service.display);
+	service.annotations=createAnnotationsFromXml(data);
+	$("#output-"+id).html(matchAnnotationsToString(service.annotations));
 	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true});
 };
 

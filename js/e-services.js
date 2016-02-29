@@ -3,10 +3,6 @@
  */
 
 var eEntity = {
-
-    unique : ["anchorOf","taIdentRef","taConfidence","isString"],
-    collection :["target","taClassRef"],
-
     createHtml : function() {
         var data = {
             "\\$id\\$" : this.id
@@ -17,11 +13,7 @@ var eEntity = {
         $("#enrich-" + this.id).click(function() {
             that.doEnrichment();
         });
-
-
     },
-
-
     doEnrichment : function() {
         var input = this.getInput();
         var variables = "?informat=" + encodeURIComponent(input.informat);
@@ -30,55 +22,21 @@ var eEntity = {
         variables += "&language=" + $("#language-" + this.id).val();
         variables += "&mode=" + $("#mode-" + this.id).val();
         var that = this;
-        console.log(input.input);
-        $.post(
-            fwm.fremeApi + "/e-entity/freme-ner/documents" + variables,
-            {input : input.input},
-            function() {},
-            'xml')
-            .done(function(data) {
-                processResponse(input,data,that.id,eEntity)
 
-            })
-            .fail(function(data) {
-                exceptionToDialog(data);
-            })
-            .always(function() {});
+        $.ajax({
+            type:"POST",
+            url:fwm.fremeApi + "/e-entity/freme-ner/documents" +variables,
+            data: input.input,//{input:   input.input,//},
+            contentType: input.informat,
+            success: function(data){processResponse(data,that.id)},
+            error: function(data){exceptionToDialog(data)},
+            dataType: "xml"
+        });
     },
-
-
-    generateTooltipText : function(annotation,str,id) {
-        if (annotation.context) {
-            return {tooltip : "" , appendix : ""}
-        }
-
-        var tooltip="<a href=\"#\" class=\"tooltip\" title=\"";
-        for (var i=0; i<eEntity.unique.length; i++) {
-
-            if (annotation[eEntity.unique[i]]) {
-                tooltip+="&lt;p&gt;&lt;strong&gt;" + eEntity.unique[i] + " : &lt;/strong&gt;"+ annotation[eEntity.unique[i]] + "&lt;/p&gt;";
-            }
-        }
-
-       for (i=0; i<eEntity.collection.length; i++) {
-
-           if (annotation[eEntity.collection[i]]) {
-               tooltip+="&lt;p&gt;&lt;strong&gt;"+ eEntity.collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
-               for (var item in annotation[eEntity.collection[i]]) {
-                   if (annotation[eEntity.collection[i]].hasOwnProperty(item)) {
-                       tooltip += "&lt;li&gt;" + annotation[eEntity.collection[i]][item] + "&lt;/li&gt;";
-                   }
-               }
-               tooltip+="&lt;/ul&gt;";
-           }
-       }
-        return {tooltip : tooltip + "\"> " + str + "</a>" , appendix : ""} ;
-    }
 };
 
 
 var eLink = {
-
     createHtml : function() {
         var data = {
             "\\$id\\$" : this.id
@@ -89,22 +47,13 @@ var eLink = {
         $("#enrich-" + this.id).click(function() {
             that.doEnrichment();
         });
-
     },
 
     doEnrichment : function() {
     },
 
-    generateTooltipText : function(annotation,str) {
-        return "";
-    }
 };
 var eTranslation = {
-
-
-    unique: ["isString"],
-    collection: ["target"],
-
     createHtml : function() {
         var data = {
             "\\$id\\$" : this.id
@@ -124,25 +73,16 @@ var eTranslation = {
         variables += "&source-lang=" + $("#source-lang-" + this.id).val();
         variables += "&target-lang=" + $("#target-lang-" + this.id).val();
         var that = this;
-        console.log(input.input);
 
         $.ajax({
                 type:"POST",
                 url:fwm.fremeApi + "/e-translation/tilde" +variables,
-                data: {input: input.input},
-                success: function(data){processResponse(input,data,that.id,eTranslation)},
+                data: input.input,//,{input: input.input},
+                contentType: input.informat,
+                success: function(data){processResponse(data,that.id)},
                 error: function(data){exceptionToDialog(data)},
                 dataType: "xml"
             });
-
-    },
-
-    generateTooltipText : function(annotation,str,id) {
-        var appendix="";
-        for (var i =0; i<annotation.target.length; i++ ) {
-            appendix+="<br><br><strong>Translation to:</strong><p>" +  $("#target-lang-" + id).val()+ "</p>" +  annotation.target[i];
-        }
-        return {tooltip : str, appendix : appendix} ;
     }
 };
 
@@ -162,11 +102,8 @@ var eTerminology = {
     },
 
     doEnrichment : function() {
-    },
-
-    generateTooltipText : function(annotation) {
-        return "";
     }
+
 };
 
 

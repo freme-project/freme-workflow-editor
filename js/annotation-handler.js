@@ -1,7 +1,8 @@
 /**
  * Created by jonathan(jonathan.sauder@student.hpi.de on 2/25/16.
  */
-var createAnnotationsFromXml = function(xmlResponse,unique,collection){
+
+var createAnnotationsFromXml = function(xmlResponse){
 	var rdf = $.rdf().load(xmlResponse, {});
 	var datadump = rdf.databank.dump();
 	const MODE = { UNIQUE : 0, COLLECTION : 1};
@@ -10,7 +11,7 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 	annotations = [];
 
 
-
+	console.log(datadump);
 	for (var annotation in datadump) {
 
 		if (datadump.hasOwnProperty(annotation)) {
@@ -51,16 +52,21 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 						if (datadump[annotation][predicate].hasOwnProperty(value)) {
 
 							var val = datadump[annotation][predicate][value].value;
+
 							if (mode === MODE.UNIQUE) {
 								annoObj[attr] = val;
 							} else if (mode === MODE.COLLECTION) {
-								annoObj[attr].push(val);
+								var lang = datadump[annotation][predicate][value].lang;
+								if (lang) {
+									annoObj.lang=lang;
+								}
+								annoObj[attr].push({text: val, lang: lang});
 							}
 							if (predicate.match(re("type")) && val.match(re("Context"))){
 								annoObj.context=true;
                                 annoObj.hasRelevance=true;
 							}
-							if (attr!="unknown"){
+							if (attr!="unknown" && attr != "anchorOf"){
 								annoObj.hasRelevance=true;
 							}
 							//		console.log(annotation, "\t\t..."+predicate.substring(predicate.length-10,predicate.length),val.substring(val.length-10, val.length));
@@ -76,7 +82,11 @@ var createAnnotationsFromXml = function(xmlResponse,unique,collection){
 	return resolveOffsetConflicts(annotations);
 };
 
-var matchAnnotationsToString = function(str,annotations,generateTooltip,id) {
+const unique= ["anchorOf","taIdentRef","taConfidence","isString"];
+const collection = ["target","taClassRef"];
+
+
+var matchAnnotationsToString = function(annotations) {
 	/*
 	 * Matches found annotations to String :
 	 * Adds <a href="#" class="tooltip" title="[Annotation - Description]"> [Annotation-Name] </a> in the text correctly
@@ -84,20 +94,20 @@ var matchAnnotationsToString = function(str,annotations,generateTooltip,id) {
 
 	var i= 0;
 	var a;
-
+	var str=annotations[annotations.length-1].isString;
 	var final="";
 	var appendix= "";
-	var tooltipObj = {};
 	for (k=0; k<annotations.length;k++) {
 		a=annotations[k];
-		tooltipObj= generateTooltip(a, str. substring(a.beginIndex, a.endIndex),id);
+		if (a.context) {
+			appendix += generateAppendix(a);
+		}
 		if (!a.context) {
 			final += str.substring(i, a.beginIndex);
-			final += tooltipObj.tooltip;
+			final += generateTooltip(a,str.substring(a.beginIndex, a.endIndex));
 			i = a.endIndex;
 		}
 
-		appendix += tooltipObj.appendix;
 	}
 	final+=str.substring(i);
 	final+= appendix;
@@ -154,3 +164,38 @@ var resolveOffsetConflicts = function(annotations){
 	return annotations;
 };
 
+var generateAppendix = function(annotation) {
+	var appendix = "";
+	if (annotation.target) {
+		for (var i = 0; i < annotation.target.length; i++) {
+			appendix += "<br><br><strong>Translation to:</strong><p>" + annotation.target[i].lang + "</p>" + annotation.target[i].text;
+		}
+	}
+	return appendix;
+}
+
+var generateTooltip = function(annotation,str) {
+
+	var tooltip="<a href=\"#\" class=\"tooltip\" title=\"";
+	for (var i=0; i<unique.length; i++) {
+
+		if (annotation[unique[i]]) {
+			tooltip+="&lt;p&gt;&lt;strong&gt;" + unique[i] + " : &lt;/strong&gt;"+ annotation[unique[i]] + "&lt;/p&gt;";
+		}
+	}
+	
+
+	for (i=0; i<collection.length; i++) {
+
+		if (annotation[collection[i]]) {
+			tooltip+="&lt;p&gt;&lt;strong&gt;"+ collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
+			for (var item in annotation[collection[i]]) {
+				if (annotation[collection[i]].hasOwnProperty(item)) {
+					tooltip += "&lt;li&gt;" + annotation[collection[i]][item].text + "&lt;/li&gt;";
+				}
+			}
+			tooltip+="&lt;/ul&gt;";
+		}
+	}
+	return tooltip + "\"> " + str + "</a>";
+}
