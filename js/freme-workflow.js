@@ -10,7 +10,7 @@ $(document).ready(function() {
 	}
 });
 
-var debug = true;
+var debug = false;
 var fwm = {
 
 	eServices : [],
@@ -155,7 +155,8 @@ var exceptionToDialog = function(data){
 
 var processResponse = function(data,id) {
 	var service = fwm.eServices[id];
-	$("#nif-"+id).html("<pre><code>"+escapeHtml(xmlToString(data))+"</code></pre>");
+	service.nif = xmlToString(data);
+	$("#nif-"+id).html("<pre><code>"+escapeHtml(service.nif)+"</code></pre>");
 	service.annotations=createAnnotationsFromXml(data);
 	$("#output-"+id).html(matchAnnotationsToString(service.annotations));
 	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true});
