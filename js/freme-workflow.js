@@ -3,14 +3,14 @@ $(document).ready(function() {
 
 	if (debug) {
 		console.log("DEBUG!!!");
-		fwm.addEService("e-translation");
-		fwm.addEService("e-entity");
+		fwm.addEService("e-entity").doEnrichment();
+		setTimeout(function() {toggleNif(0)}, 1000);
 		fwm.addEService("e-translation");
 		$("#target-lang-2").val("nl")
 	}
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
@@ -155,11 +155,37 @@ var exceptionToDialog = function(data){
 
 var processResponse = function(data,id) {
 	var service = fwm.eServices[id];
-	service.nif=xmlToString(data);
+	$("#nif-"+id).html("<pre><code>"+escapeHtml(xmlToString(data))+"</code></pre>");
 	service.annotations=createAnnotationsFromXml(data);
 	$("#output-"+id).html(matchAnnotationsToString(service.annotations));
 	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true});
 };
 
 
+var toggleNif = function(id) {
+	var nifdiv = $("#nif-"+id);
+	var togglediv = $("#toggle-"+id);
+	if (togglediv.text()=="[Show NIF]") {
+		nifdiv.show();
+		togglediv.text("[Hide NIF]")
+	} else if (togglediv.text()=="[Hide NIF]") {
+        nifdiv.hide();
+		togglediv.text("[Show NIF]")
+	}
+}
 
+
+var entityMap = {
+	"&": "&amp;",
+	"<": "&lt;",
+	">": "&gt;",
+	'"': '&quot;',
+	"'": '&#39;',
+	"/": '&#x2F;'
+};
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'\/]/g, function (s) {
+		return entityMap[s];
+	});
+}

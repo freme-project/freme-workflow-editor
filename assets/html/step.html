@@ -7,7 +7,9 @@
 	<div class="inner-box">
 		<div style="width: 100%; text-align: left" id="innerbox-$id$">
 			<div style="text-align: right">
-				<a class="closing-box" href="#">[Show NIF]</a>
+				<a id="toggle-$id$" class="closing-box" onclick="toggleNif($id$)">[Show NIF]</a>
+			</div>
+			<div style="display:none;" class="box-code" id="nif-$id$">
 			</div>
 			<div class="box-text" id="output-$id$"></div>
 		</div>
