@@ -100,23 +100,24 @@
 					<tr>
 						<td class = "label-dropdown">Filter</td>
 						<td>
-							<select>
+							<select id="filter-name">
+								<option>extract-entities-only</option>
+								<option>sourcelang-targetlang</option>
+								<option>original-and-translation</option>
 								<option>terminology-terms-only</option>
-								<option>terms-only</option>
+								<option>entities-detailed-info</option>
 							</select>
 						</td>
 					</tr>
 				</table>
 				<br>
-				<button class="service-entry" id="box-button">Apply filter</button>
+				<button class="service-entry" onclick="doPostprocessingFilter()">Apply filter</button>
 			</div>
 			
 			<div class="inner-box">
-				<p class="box-title"><strong>FILTER "ENTITIES ONLY"</strong><p>
-				<ul class="bullet-list">
-					<li>Berlin
-					<li>Germany
-				</ul>
+				<p class="box-title" id="filter-header"><p>
+				<div id="filtered">
+				</div>
 			</div>
 		</div>
 	</div>

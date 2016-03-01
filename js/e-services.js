@@ -124,3 +124,19 @@ var eTerminology = {
 
 
 
+var doPostprocessingFilter = function() {
+    var input = fwm.eServices[fwm.eServices.length-1].nif;
+    var filtername=  $("#filter-name").val()
+    var variables = filtername+ "?informat=rdf-xml";
+    variables += "&outformat=json";
+    var that = this;
+    $.ajax({
+        type:"POST",
+        url:fwm.fremeApi + "/toolbox/filter/documents/" +variables,
+        data: input,
+        contentType: "application/rdf+xml",
+        success: function(data){$("#filtered").html(jsonToTable(data));$("#filter-header").html("<strong>FILTER: "+filtername.toUpperCase()+"</strong>")},
+        error: function(data){exceptionToDialog(data)}
+       // dataType: "csv"
+    });
+}

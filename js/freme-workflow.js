@@ -4,13 +4,13 @@ $(document).ready(function() {
 	if (debug) {
 		console.log("DEBUG!!!");
 		fwm.addEService("e-entity").doEnrichment();
-		setTimeout(function() {toggleNif(0)}, 1000);
-		fwm.addEService("e-translation");
-		$("#target-lang-2").val("nl")
+		setTimeout(function() {doPostprocessingFilter()}, 1000);
+		/*fwm.addEService("e-translation");
+		$("#target-lang-2").val("nl")*/
 	}
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
@@ -189,4 +189,28 @@ function escapeHtml(string) {
 	return String(string).replace(/[&<>"'\/]/g, function (s) {
 		return entityMap[s];
 	});
+}
+
+function jsonToTable(json) {
+	var li="<table><tr>";
+	var cols=json.head.vars.length;
+	var val;
+	for (var i=0; i<cols;i++) {
+		li+="<th>"+json.head.vars[i]+"</th>"
+	}
+	li+="</tr>";
+
+	for(i=0; i<json.results.bindings.length;i++) {
+		li+="<tr>"
+		for (var k=0; k<cols;k++) {
+			val = json.results.bindings[i][json.head.vars[k]];
+			if (val) {
+				li += "<td>" + val.value + "</td>";
+
+			}
+		}
+		li+="</tr>";
+	}
+
+	return li+"</table>";
 }
