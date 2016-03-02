@@ -1,17 +1,19 @@
 /**
  * Created by jonathan(jonathan.sauder@student.hpi.de on 2/25/16.
  */
-
-var createAnnotationsFromXml = function(xmlResponse){
+var xmlToRdf = function(xml) {
 	try {
-		var rdf = $.rdf().load(xmlResponse, {});
+		return rdf = $.rdf().load(xml, {});
 	} catch (e) {
-		var rdf = $.rdf().load(stringToXml(xmlToString(xmlResponse).replace(/##XMLLiteral/g, "#XMLLiteral")) , {});
+		return rdf = $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral")) , {});
 	}
+}
+var createAnnotations = function(rdf){
 	var datadump = rdf.databank.dump();
 	const MODE = { UNIQUE : 0, COLLECTION : 1};
 	var attr;
 	var mode;
+	console.log(datadump);
 	annotations = [];
 	//console.log(datadump);
 	for (var annotation in datadump) {
@@ -211,4 +213,22 @@ var generateTooltip = function(annotation,str) {
 		}
 	}
 	return tooltip + "\"> " + str + "</a>";
+}
+
+
+var addTerminologyTermsToRdf = function(previousRdf,json) {
+	console.log(json);
+	var jrb = json.results.bindings;
+	for (var i=0;i<jrb.length;i++) {
+		console.log(jrb[i]);
+		var subject = "<http://freme-project.eu/#char="+jrb[i].beginIndex.value+","+jrb[i].endIndex.value+">";
+
+		previousRdf.databank.dump(
+			$.rdf.triple(
+				subject,
+				"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#terminology>",
+				jrb[i].new_uri[0]));
+	}
+	console.log(previousRdf.databank.dump())
+
 }

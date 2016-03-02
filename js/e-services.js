@@ -120,7 +120,7 @@ var eTerminology = {
     doEnrichment : function() {
         var input = this.getInput();
         var variables = "?informat=" + encodeURIComponent(input.informat);
-        variables += "&outformat=csv&filter=freme-workflow-editor-terminology";
+        variables += "&outformat=json&filter=freme-workflow-editor-terminology";
         variables += "&source-lang=" + $("#source-lang-" + this.id).val();
         variables += "&target-lang=" + $("#target-lang-" + this.id).val();
         var that = this;
@@ -130,9 +130,16 @@ var eTerminology = {
             url:fwm.fremeApi + "/e-terminology/tilde" +variables,
             data: input.input,//,{input: input.input},
             contentType: input.informat,
-            success: function(data){processResponse(data,that.id)},
-            error: function(data){exceptionToDialog(data)},
-            dataType: "xml"
+            success: function(data) {
+                if (input.informat=="application/rdf-xml") {
+                    var rdfData = xmlToRdf(stringToXml(input.input));
+                } else {
+                    var rdfData = $.rdf();
+                }
+                addTerminologyTermsToRdf(rdfData, data);
+            },
+            error: function(data){exceptionToDialog(data)}
+//            dataType: "csv"
         });
     }
 
@@ -156,3 +163,6 @@ var doPostprocessingFilter = function() {
        // dataType: "csv"
     });
 }
+
+
+
