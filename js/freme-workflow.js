@@ -4,7 +4,7 @@ $(document).ready(function() {
 	if (debug) {
 		console.log("DEBUG!!!");
 		fwm.addEService("e-entity").doEnrichment();
-		setTimeout(function() {doPostprocessingFilter()}, 1000);
+		setTimeout(function() {fwm.addEService("e-link").doEnrichment()}, 2000);
 		/*fwm.addEService("e-translation");
 		$("#target-lang-2").val("nl")*/
 	}
@@ -15,7 +15,7 @@ var fwm = {
 
 	eServices : [],
 	idCounter : 0,
-	fremeApi : "http://api.freme-project.eu/0.5",
+	fremeApi : "http://api-dev.freme-project.eu/current",
 
 	addEService : function(type) {
 
@@ -192,6 +192,11 @@ function escapeHtml(string) {
 }
 
 function jsonToTable(json) {
+	/*
+	 * Used in Postprocessing / Filter
+	 * It felt more natural to use json instead of csv in javascript
+	 * Creates HTML Table out of Table-like JSON
+	 */
 	var li="<table><tr>";
 	var cols=json.head.vars.length;
 	var val;

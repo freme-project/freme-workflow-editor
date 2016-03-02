@@ -55,7 +55,6 @@ var eLink = {
         variables += "&outformat=rdf-xml";
         variables += "&templateid=" + $("#template-" + this.id).val();
         var that = this;
-
         $.ajax({
             type:"POST",
             url:fwm.fremeApi + "/e-link/documents" +variables,

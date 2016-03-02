@@ -9,7 +9,6 @@ var createAnnotationsFromXml = function(xmlResponse){
 	var attr;
 	var mode;
 	annotations = [];
-
 	for (var annotation in datadump) {
 		if (datadump.hasOwnProperty(annotation)) {
 			var annoObj = {};
@@ -76,15 +75,24 @@ var createAnnotationsFromXml = function(xmlResponse){
 			annotations.push(annoObj);
 		}
 	}
+
+	for (i=0; i<annotations.length;i++) {
+        if (datadump[annotations[i].taIdentRef]) {
+            annotations[i].abstract = datadump[annotations[i].taIdentRef]["http://dbpedia.org/ontology/abstract"][0].value;
+			annotations[i].thumbnail = datadump[annotations[i].taIdentRef]["http://dbpedia.org/ontology/thumbnail"][0].value;
+        }
+	}
+
 	return resolveOffsetConflicts(annotations);
 };
 
-const unique= ["anchorOf","taIdentRef","taConfidence","isString"];
+const unique= ["anchorOf","abstract","thumbnail","taIdentRef","taConfidence","isString"];
 const collection = ["target","taClassRef"];
 
 
 var matchAnnotationsToString = function(annotations) {
 	/*
+	 * Note that the last annotation in the array is always the context!
 	 * Matches found annotations to String :
 	 * Adds <a href="#" class="tooltip" title="[Annotation - Description]"> [Annotation-Name] </a> in the text correctly
 	 */
@@ -156,6 +164,10 @@ var resolveOffsetConflicts = function(annotations){
 };
 
 var generateAppendix = function(annotation) {
+	/*
+	 * Used primarily for generating Human readable text annotation for E-translation service.
+	 * Each Translated context will be appended to the enriched text
+	 */
 	var appendix = "";
 	if (annotation.target) {
 		for (var i = 0; i < annotation.target.length; i++) {
@@ -166,15 +178,21 @@ var generateAppendix = function(annotation) {
 }
 
 var generateTooltip = function(annotation,str) {
-
+	/*
+	 * Used for annotating in-text annotations, such as entities.
+	 *
+	 */
 	var tooltip="<a href=\"#\" class=\"tooltip\" title=\"";
 	for (var i=0; i<unique.length; i++) {
 
 		if (annotation[unique[i]]) {
-			tooltip+="&lt;p&gt;&lt;strong&gt;" + unique[i] + " : &lt;/strong&gt;"+ annotation[unique[i]] + "&lt;/p&gt;";
+			var text =  escapeHtml(annotation[unique[i]]);
+			IsValidImageUrl(annotation[unique[i]])
+			text = text.length>400? text=text.substring(0,400)+"..." : text;
+			tooltip+="&lt;p&gt;&lt;strong&gt;" + escapeHtml(unique[i]) + " : &lt;/strong&gt;"+ text + "&lt;/p&gt;";
 		}
 	}
-	
+
 
 	for (i=0; i<collection.length; i++) {
 
@@ -189,4 +207,16 @@ var generateTooltip = function(annotation,str) {
 		}
 	}
 	return tooltip + "\"> " + str + "</a>";
+}
+
+function IsValidImageUrl(url) {
+	$("<img>", {
+		src: url,
+		error: function () {
+			console.log(url, "IMAGE");
+		},
+		load: function () {
+			callback(url, "NO IMAGE");
+		}
+	});
 }
