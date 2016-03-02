@@ -3,12 +3,17 @@
  */
 
 var createAnnotationsFromXml = function(xmlResponse){
-	var rdf = $.rdf().load(xmlResponse, {});
+	try {
+		var rdf = $.rdf().load(xmlResponse, {});
+	} catch (e) {
+		var rdf = $.rdf().load(stringToXml(xmlToString(xmlResponse).replace(/##XMLLiteral/g, "#XMLLiteral")) , {});
+	}
 	var datadump = rdf.databank.dump();
 	const MODE = { UNIQUE : 0, COLLECTION : 1};
 	var attr;
 	var mode;
 	annotations = [];
+	console.log(datadump);
 	for (var annotation in datadump) {
 		if (datadump.hasOwnProperty(annotation)) {
 			var annoObj = {};
@@ -171,7 +176,7 @@ var generateAppendix = function(annotation) {
 	var appendix = "";
 	if (annotation.target) {
 		for (var i = 0; i < annotation.target.length; i++) {
-			appendix += "<br><br><strong>Translation to:</strong><p>" + annotation.target[i].lang + "</p>" + annotation.target[i].text;
+			appendix += "<br><br><p><strong>Translation to:</strong>" + annotation.target[i].lang + "</p>" + annotation.target[i].text;
 		}
 	}
 	return appendix;
@@ -187,9 +192,8 @@ var generateTooltip = function(annotation,str) {
 
 		if (annotation[unique[i]]) {
 			var text =  escapeHtml(annotation[unique[i]]);
-			IsValidImageUrl(annotation[unique[i]])
 			text = text.length>400? text=text.substring(0,400)+"..." : text;
-			tooltip+="&lt;p&gt;&lt;strong&gt;" + escapeHtml(unique[i]) + " : &lt;/strong&gt;"+ text + "&lt;/p&gt;";
+			tooltip+="&lt;p&gt;&lt;strong&gt;" + escapeHtml(unique[i]) + " :  "+ text + "&lt;/strong&gt;&lt;/p&gt;";
 		}
 	}
 
@@ -207,16 +211,4 @@ var generateTooltip = function(annotation,str) {
 		}
 	}
 	return tooltip + "\"> " + str + "</a>";
-}
-
-function IsValidImageUrl(url) {
-	$("<img>", {
-		src: url,
-		error: function () {
-			console.log(url, "IMAGE");
-		},
-		load: function () {
-			callback(url, "NO IMAGE");
-		}
-	});
 }

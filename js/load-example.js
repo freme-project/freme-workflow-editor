@@ -16,6 +16,27 @@ var exampleTextHolder = {
     "</body>\n" +
     "</html>\n",
 
+    turtle : "@prefix dbpedia-fr: <http://fr.dbpedia.org/resource/> ." +
+    "    @prefix dbc:   <http://dbpedia.org/resource/Category:> ." +
+    "    @prefix dbpedia-es: <http://es.dbpedia.org/resource/> ." +
+    "    @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> ." +
+    "    @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> ." +
+    "    <http://freme-project.eu/#char=0,741>" +
+    "    a               nif:String , nif:Context , nif:RFC5147String ;" +
+    "nif:beginIndex  \"0\"^^xsd:int ;" +
+    "nif:endIndex    \"741\"^^xsd:int ;" +
+    "nif:isString    \"The Nibelungenlied, " +
+    "translated as The Song of the Nibelungs, is an epic poem in Middle High German. " +
+    "The story tells of dragon-slayer Siegfried at the court of the Burgundians, " +
+    "how he was murdered, and of his wife Kriemhild's revenge.The Nibelungenlied " +
+    "is based on pre-Christian Germanic heroic motifs (the Nibelungensaga), which" +
+    " include oral traditions and reports based on historic events and individuals of the" +
+    " 5th and 6th centuries. Old Norse parallels of the legend survive in the Völsunga saga," +
+    " the Prose Edda, the Poetic Edda, the Legend of Norna-Gest, and the Þiðrekssaga.In" +
+    " 2009, the three main manuscripts of the Nibelungenlied were inscribed in UNESCO's Memory " +
+    "of the World Register in recognition of their historical significance.\"^^xsd:string .",
+
+
 
 
     xliff : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
@@ -42,6 +63,7 @@ var loadExample = function(){
             break;
         case "text/html":text=exampleTextHolder.html;
             break
+        case "text/turtle":text=exampleTextHolder.turtle;
     }
     var area= $("#input-area");
     area.val("");

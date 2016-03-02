@@ -4,13 +4,13 @@ $(document).ready(function() {
 	if (debug) {
 		console.log("DEBUG!!!");
 		fwm.addEService("e-entity").doEnrichment();
-		setTimeout(function() {fwm.addEService("e-link").doEnrichment()}, 2000);
+		//setTimeout(function() {fwm.addEService("e-link").doEnrichment()}, 2000);
 		/*fwm.addEService("e-translation");
 		$("#target-lang-2").val("nl")*/
 	}
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
@@ -147,6 +147,10 @@ var xmlToString = function(xmlData) {
 	return xmlString;
 };
 
+var stringToXml = function(str) {
+	var xmlFields = $(str);
+	return xmlFields[0].outerHTML;
+}
 
 var exceptionToDialog = function(data){
 	$("#jquery-ui-dialog").html(data.responseText.replace(/\\\"/g,"''").replace(/\"/g," ").replace(/{/g,"").replace(/}/g,"").replace(/,/g,"<br>"))
