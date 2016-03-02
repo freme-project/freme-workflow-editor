@@ -13,7 +13,7 @@ var createAnnotationsFromXml = function(xmlResponse){
 	var attr;
 	var mode;
 	annotations = [];
-	console.log(datadump);
+	//console.log(datadump);
 	for (var annotation in datadump) {
 		if (datadump.hasOwnProperty(annotation)) {
 			var annoObj = {};
@@ -176,7 +176,7 @@ var generateAppendix = function(annotation) {
 	var appendix = "";
 	if (annotation.target) {
 		for (var i = 0; i < annotation.target.length; i++) {
-			appendix += "<br><br><p><strong>Translation to:</strong>" + annotation.target[i].lang + "</p>" + annotation.target[i].text;
+			appendix += "<br><br><p><strong>Translation to: " + annotation.target[i].lang + "</strong></p>" + annotation.target[i].text;
 		}
 	}
 	return appendix;
@@ -193,7 +193,7 @@ var generateTooltip = function(annotation,str) {
 		if (annotation[unique[i]]) {
 			var text =  escapeHtml(annotation[unique[i]]);
 			text = text.length>400? text=text.substring(0,400)+"..." : text;
-			tooltip+="&lt;p&gt;&lt;strong&gt;" + escapeHtml(unique[i]) + " :  "+ text + "&lt;/strong&gt;&lt;/p&gt;";
+			tooltip+="&lt;p&gt;&lt;strong&gt;" + escapeHtml(unique[i]) + " : &lt;/strong&gt;"+ text + "&lt;/p&gt;";
 		}
 	}
 

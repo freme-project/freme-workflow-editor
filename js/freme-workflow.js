@@ -10,7 +10,7 @@ $(document).ready(function() {
 	}
 });
 
-var debug = true;
+var debug = false;
 var fwm = {
 
 	eServices : [],
