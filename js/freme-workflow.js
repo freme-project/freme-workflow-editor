@@ -3,16 +3,16 @@ $(document).ready(function() {
 
 	if (debug) {
 		console.log("DEBUG!!!");
-		$("#input-area").val("Berlin is the capital of Germany");
-		$("#input-informat").val("text/plain");
+		//$("#input-area").val("Berlin is the capital of Germany");
+		//$("#input-informat").val("text/plain");
 		fwm.addEService("e-entity").doEnrichment();
-		setTimeout(function() {fwm.addEService("e-terminology").doEnrichment()}, 2000);
+		setTimeout(function() {fwm.addEService("e-link").doEnrichment()}, 2000);
 		/*fwm.addEService("e-translation");
 		$("#target-lang-2").val("nl")*/
 	}
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
@@ -179,7 +179,7 @@ var processRdfResponse = function(data, id, rdf) {
 	$("#nif-"+id).html("<pre><code>"+escapeHtml(service.nif)+"</code></pre>");
 	service.annotations=createAnnotations(rdf);
 	$("#output-"+id).html(matchAnnotationsToString(service.annotations));
-	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true});
+	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true,maxWidth:700});
 };
 
 var processXmlResponse = function(data, id) {

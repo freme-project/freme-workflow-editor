@@ -24,7 +24,8 @@
 	<script>
 		$(document).ready(function() {
 			$('.tooltip').tooltipster({
-				contentAsHTML : true
+				contentAsHTML : true,
+				maxWidth: 700
 			});
 			$("#jquery-ui-dialog").dialog({
 				buttons : [{text:"OK",click:function(){$(this).dialog("close")}}],
@@ -76,7 +77,6 @@
 							<option value="text/turtle">Turtle</option>
 							<option value="json-ld">JSON-LD</option>
 							<option value="application/x-xliff+xml">XLIFF 1.2</option>
-							<option value="application/x-openoffice">Open document type</option>
 							<option value="text/html">HTML5</option>
 							<option value="application/rdf+xml">RDF-XML</option>
 						</select></td>

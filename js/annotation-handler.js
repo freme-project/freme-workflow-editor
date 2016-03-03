@@ -91,8 +91,17 @@ var createAnnotations = function(rdf){
 };
 
 const unique= ["anchorOf","abstract","thumbnail","taIdentRef","taConfidence","isString"];
-const collection = ["target","taClassRef","terminology"];
-
+const collection = ["target","taClassRef","new_label","new_uri"];
+const specialName = {
+	new_label:"Terms",
+	new_uri:"Concepts",
+	taClassRef:"Entity Classes",
+	taIdentRef:"Identifier",
+	thumbnail: "Thumbnail"
+};
+var getName = function(str) {
+	return  specialName[str] ? specialName[str] : str
+};
 
 var matchAnnotationsToString = function(annotations) {
 	/*
@@ -192,13 +201,20 @@ var generateTooltip = function(annotation,str) {
 	 * Used for annotating in-text annotations, such as entities.
 	 *
 	 */
-	var tooltip="<a href=\"#\" class=\"tooltip\" title=\"";
+	var hyperlink = annotation["taIdentRef"] ? escapeHtml(annotation["taIdentRef"])+ "\" target=\"_blank" : "#\" onclick=\"return false;";
+	var tooltip="<a href=\""+hyperlink+"\" class=\"tooltip\" title=\"";
 	for (var i=0; i<unique.length; i++) {
 
 		if (annotation[unique[i]]) {
-			var text =  escapeHtml(annotation[unique[i]]);
-			text = text.length>400? text=text.substring(0,400)+"..." : text;
-			tooltip+="&lt;p&gt;&lt;strong&gt;" + escapeHtml(unique[i]) + " : &lt;/strong&gt;"+ text + "&lt;/p&gt;";
+
+			if (unique[i]=="thumbnail") {
+				tooltip+=escapeHtml("<p><strong>"+getName(unique[i])+" :</strong></p><img height=\"180px\" src=\""+annotation[unique[i]]+"\"/>");
+//				tooltip+="&lt;p&gt;&lt;strong&gt;" + escapeHtml(unique[i]) + " : &lt;/strong&gt;"+ annotation[unique + "&lt;/p&gt;"
+			} else {
+				var text = escapeHtml(annotation[unique[i]]);
+				text = text.length > 400 ? text = text.substring(0, 400) + "..." : text;
+				tooltip += "&lt;p&gt;&lt;strong&gt;" + escapeHtml(getName(unique[i])) + " : &lt;/strong&gt;" + text + "&lt;/p&gt;";
+			}
 		}
 	}
 
@@ -206,7 +222,7 @@ var generateTooltip = function(annotation,str) {
 	for (i=0; i<collection.length; i++) {
 
 		if (annotation[collection[i]]) {
-			tooltip+="&lt;p&gt;&lt;strong&gt;"+ collection[i] +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
+			tooltip+="&lt;p&gt;&lt;strong&gt;"+ getName(collection[i]) +":&lt;/strong&gt; &lt;/p&gt;&lt;ul&gt;";
 			for (var item in annotation[collection[i]]) {
 				if (annotation[collection[i]].hasOwnProperty(item)) {
 					tooltip += "&lt;li&gt;" + annotation[collection[i]][item].text + "&lt;/li&gt;";
@@ -231,10 +247,20 @@ var addTerminologyTermsToRdf = function(rdf,json) {
 			rdf.add(
 				$.rdf.triple(
 					subject,
-					"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#terminology>",
+					"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#new_uri>",
 					"<"+objects[k].trim()+">"));
 		}
+		console.log(jrb[i]);
+		objects = jrb[i].new_label.value.split(/,/g);
 
+		for (var k =0; k<objects.length;k++) {
+			rdf.add(
+				$.rdf.triple(
+					subject,
+					"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#new_label>",
+
+					"<"+objects[k].trim()+">"));
+		}
 		rdf.add($.rdf.triple(
 			subject,
 			"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex>",

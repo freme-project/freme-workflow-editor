@@ -137,7 +137,8 @@ var eTerminology = {
                 } else {
                     var rdfData = $.rdf();
                 }
-                processRdfResponse( xml, that.id, addTerminologyTermsToRdf(rdfData, data));
+                rdfData = addTerminologyTermsToRdf(rdfData, data);
+                processXmlResponse( rdfData.databank.dump({format :"application/rdf+xml" }), that.id,rdfData );
             },
             error: function(data){exceptionToDialog(data)}
 //            dataType: "csv"

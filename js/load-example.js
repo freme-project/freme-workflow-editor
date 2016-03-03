@@ -16,16 +16,16 @@ var exampleTextHolder = {
     "</body>\n" +
     "</html>\n",
 
-    turtle : "@prefix dbpedia-fr: <http://fr.dbpedia.org/resource/> ." +
-    "    @prefix dbc:   <http://dbpedia.org/resource/Category:> ." +
-    "    @prefix dbpedia-es: <http://es.dbpedia.org/resource/> ." +
-    "    @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> ." +
-    "    @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> ." +
-    "    <http://freme-project.eu/#char=0,741>" +
-    "    a               nif:String , nif:Context , nif:RFC5147String ;" +
-    "nif:beginIndex  \"0\"^^xsd:int ;" +
-    "nif:endIndex    \"741\"^^xsd:int ;" +
-    "nif:isString    \"The Nibelungenlied, " +
+    turtle : "@prefix dbpedia-fr: <http://fr.dbpedia.org/resource/> .\n" +
+    "@prefix dbc:   <http://dbpedia.org/resource/Category:> .\n" +
+    "@prefix dbpedia-es: <http://es.dbpedia.org/resource/> .\n" +
+    "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +
+    "@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .\n" +
+    "<http://freme-project.eu/#char=0,741>\n" +
+    "   a               nif:String , nif:Context , nif:RFC5147String ;\n"+
+    "   nif:beginIndex  \"0\"^^xsd:int ;\n" +
+    "   nif:endIndex    \"741\"^^xsd:int ;\n" +
+    "   nif:isString    \"The Nibelungenlied, " +
     "translated as The Song of the Nibelungs, is an epic poem in Middle High German. " +
     "The story tells of dragon-slayer Siegfried at the court of the Burgundians, " +
     "how he was murdered, and of his wife Kriemhild's revenge.The Nibelungenlied " +
