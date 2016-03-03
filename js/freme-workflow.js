@@ -149,9 +149,21 @@ var xmlToString = function(xmlData) {
 	return xmlString;
 };
 
-var stringToXml = function(str) {
+/*var stringToXml = function(str) {
 	var xmlFields = $(str);
 	return xmlFields[0].outerHTML;
+}*/
+
+function stringToXml(oString) {
+	//code for IE
+	if (window.ActiveXObject) {
+		var oXML = new ActiveXObject("Microsoft.XMLDOM"); oXML.loadXML(oString);
+		return oXML;
+	}
+	// code for Chrome, Safari, Firefox, Opera, etc.
+	else {
+		return (new DOMParser()).parseFromString(oString, "text/xml");
+	}
 }
 
 var exceptionToDialog = function(data){
@@ -159,13 +171,19 @@ var exceptionToDialog = function(data){
 	.dialog("open");
 };
 
-var processResponse = function(data,id) {
+
+
+var processRdfResponse = function(data, id, rdf) {
 	var service = fwm.eServices[id];
 	service.nif = xmlToString(data);
 	$("#nif-"+id).html("<pre><code>"+escapeHtml(service.nif)+"</code></pre>");
-	service.annotations=createAnnotations(xmlToRdf(data));
+	service.annotations=createAnnotations(rdf);
 	$("#output-"+id).html(matchAnnotationsToString(service.annotations));
 	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true});
+};
+
+var processXmlResponse = function(data, id) {
+	return processRdfResponse(data,id,xmlToRdf(data))
 };
 
 
@@ -179,7 +197,7 @@ var toggleNif = function(id) {
         nifdiv.hide();
 		togglediv.text("[Show NIF]")
 	}
-}
+};
 
 
 var entityMap = {
@@ -212,7 +230,7 @@ function jsonToTable(json) {
 	li+="</tr>";
 
 	for(i=0; i<json.results.bindings.length;i++) {
-		li+="<tr>"
+		li+="<tr>";
 		for (var k=0; k<cols;k++) {
 			val = json.results.bindings[i][json.head.vars[k]];
 			if (val) {

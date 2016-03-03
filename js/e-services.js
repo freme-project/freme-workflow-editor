@@ -29,11 +29,11 @@ var eEntity = {
             url:fwm.fremeApi + "/e-entity/freme-ner/documents" +variables,
             data: input.input,//{input:   input.input,//},
             contentType: input.informat,
-            success: function(data){processResponse(data,that.id)},
+            success: function(data){processXmlResponse(data,that.id)},
             error: function(data){exceptionToDialog(data)},
             dataType: "xml"
         });
-    },
+    }
 };
 
 
@@ -61,12 +61,12 @@ var eLink = {
             url:fwm.fremeApi + "/e-link/documents" +variables,
             data: input.input,//{input:   input.input,//},
             contentType: input.informat,
-            success: function(data){processResponse(data,that.id)},
+            success: function(data){processXmlResponse(data,that.id)},
             error: function(data){exceptionToDialog(data)},
             dataType: "xml"
         });
 
-    },
+    }
 
 };
 var eTranslation = {
@@ -95,7 +95,7 @@ var eTranslation = {
                 url:fwm.fremeApi + "/e-translation/tilde" +variables,
                 data: input.input,//,{input: input.input},
                 contentType: input.informat,
-                success: function(data){processResponse(data,that.id)},
+                success: function(data){processXmlResponse(data,that.id)},
                 error: function(data){exceptionToDialog(data)},
                 dataType: "xml"
             });
@@ -131,12 +131,13 @@ var eTerminology = {
             data: input.input,//,{input: input.input},
             contentType: input.informat,
             success: function(data) {
-                if (input.informat=="application/rdf-xml") {
-                    var rdfData = xmlToRdf(stringToXml(input.input));
+                var xml= stringToXml(input.input);
+                if (input.informat=="application/rdf+xml") {
+                    var rdfData = xmlToRdf(xml);
                 } else {
                     var rdfData = $.rdf();
                 }
-                addTerminologyTermsToRdf(rdfData, data);
+                processRdfResponse( xml, that.id, addTerminologyTermsToRdf(rdfData, data));
             },
             error: function(data){exceptionToDialog(data)}
 //            dataType: "csv"
@@ -162,7 +163,7 @@ var doPostprocessingFilter = function() {
         error: function(data){exceptionToDialog(data)}
        // dataType: "csv"
     });
-}
+};
 
 
 

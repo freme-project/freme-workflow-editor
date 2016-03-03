@@ -13,9 +13,7 @@ var createAnnotations = function(rdf){
 	const MODE = { UNIQUE : 0, COLLECTION : 1};
 	var attr;
 	var mode;
-	console.log(datadump);
 	annotations = [];
-	//console.log(datadump);
 	for (var annotation in datadump) {
 		if (datadump.hasOwnProperty(annotation)) {
 			var annoObj = {};
@@ -89,12 +87,11 @@ var createAnnotations = function(rdf){
 			annotations[i].thumbnail = datadump[annotations[i].taIdentRef]["http://dbpedia.org/ontology/thumbnail"][0].value;
         }
 	}
-
 	return resolveOffsetConflicts(annotations);
 };
 
 const unique= ["anchorOf","abstract","thumbnail","taIdentRef","taConfidence","isString"];
-const collection = ["target","taClassRef"];
+const collection = ["target","taClassRef","terminology"];
 
 
 var matchAnnotationsToString = function(annotations) {
@@ -106,7 +103,13 @@ var matchAnnotationsToString = function(annotations) {
 
 	var i= 0;
 	var a;
-	var context = annotations[annotations.length-1];
+
+	var context= {isString:"",target:[]};
+
+	if (annotations[annotations.length-1].context) {
+		context=annotations.pop();
+	}
+
 	var str=context.isString;
 	var final="";
 	for (k=0; k<annotations.length-1;k++) {
@@ -182,7 +185,7 @@ var generateAppendix = function(annotation) {
 		}
 	}
 	return appendix;
-}
+};
 
 var generateTooltip = function(annotation,str) {
 	/*
@@ -213,22 +216,34 @@ var generateTooltip = function(annotation,str) {
 		}
 	}
 	return tooltip + "\"> " + str + "</a>";
-}
+};
 
 
-var addTerminologyTermsToRdf = function(previousRdf,json) {
-	console.log(json);
+var addTerminologyTermsToRdf = function(rdf,json) {
 	var jrb = json.results.bindings;
 	for (var i=0;i<jrb.length;i++) {
-		console.log(jrb[i]);
+
 		var subject = "<http://freme-project.eu/#char="+jrb[i].beginIndex.value+","+jrb[i].endIndex.value+">";
 
-		previousRdf.databank.dump(
-			$.rdf.triple(
-				subject,
-				"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#terminology>",
-				jrb[i].new_uri[0]));
-	}
-	console.log(previousRdf.databank.dump())
+		var objects = jrb[i].new_uri.value.split(/,/g);
 
-}
+		for (var k =0; k<objects.length;k++) {
+			rdf.add(
+				$.rdf.triple(
+					subject,
+					"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#terminology>",
+					"<"+objects[k].trim()+">"));
+		}
+
+		rdf.add($.rdf.triple(
+			subject,
+			"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex>",
+			jrb[i].beginIndex.value));
+
+		rdf.add($.rdf.triple(
+			subject,
+			"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex>",
+			jrb[i].endIndex.value));
+	}
+	return rdf;
+};
