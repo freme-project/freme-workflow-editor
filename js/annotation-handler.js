@@ -237,12 +237,12 @@ var generateTooltip = function(annotation,str) {
 
 var addTerminologyTermsToRdf = function(rdf,json) {
 	var jrb = json.results.bindings;
+	console.log(rdf);
 	for (var i=0;i<jrb.length;i++) {
 
 		var subject = "<http://freme-project.eu/#char="+jrb[i].beginIndex.value+","+jrb[i].endIndex.value+">";
 
 		var objects = jrb[i].new_uri.value.split(/,/g);
-
 		for (var k =0; k<objects.length;k++) {
 			rdf.add(
 				$.rdf.triple(
@@ -250,7 +250,6 @@ var addTerminologyTermsToRdf = function(rdf,json) {
 					"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#new_uri>",
 					"<"+objects[k].trim()+">"));
 		}
-		console.log(jrb[i]);
 		objects = jrb[i].new_label.value.split(/,/g);
 
 		for (var k =0; k<objects.length;k++) {

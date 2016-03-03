@@ -118,12 +118,20 @@ var eTerminology = {
     },
 
     doEnrichment : function() {
+
+        var variables;
         var input = this.getInput();
-        var variables = "?informat=" + encodeURIComponent(input.informat);
+        var that = this;
+        var rdf;
+        if (that.id==0) {
+
+        }
+
+
+        variables = "?informat=" + encodeURIComponent(input.informat);
         variables += "&outformat=json&filter=freme-workflow-editor-terminology";
         variables += "&source-lang=" + $("#source-lang-" + this.id).val();
         variables += "&target-lang=" + $("#target-lang-" + this.id).val();
-        var that = this;
 
         $.ajax({
             type:"POST",
@@ -132,13 +140,14 @@ var eTerminology = {
             contentType: input.informat,
             success: function(data) {
                 var xml= stringToXml(input.input);
-                if (input.informat=="application/rdf+xml") {
+                if (that.id!=0) {
                     var rdfData = xmlToRdf(xml);
                 } else {
-                    var rdfData = $.rdf();
+                    getContextFromEEntity(that,input,data).then(function(){});
+                    return;
                 }
                 rdfData = addTerminologyTermsToRdf(rdfData, data);
-                processXmlResponse( rdfData.databank.dump({format :"application/rdf+xml" }), that.id,rdfData );
+                processXmlResponse( rdfData.databank.dump({format :"application/rdf+xml"}), that.id,rdfData );
             },
             error: function(data){exceptionToDialog(data)}
 //            dataType: "csv"
@@ -166,5 +175,31 @@ var doPostprocessingFilter = function() {
     });
 };
 
+
+
+
+var getContextFromEEntity = function(that,input,response){
+    var rdf,rdfData;
+    return ($.ajax({
+        type:"POST",
+        url:fwm.fremeApi + "/e-entity/freme-ner/documents?informat=" +encodeURIComponent(input.informat)+"&outformat=rdf-xml&dataset=dbpedia&language=en",
+        data: input.input,//{input:   input.input,//},
+        contentType: input.informat,
+        success: function(data) {
+            rdf = xmlToRdf(data)
+                .prefix("nif", "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#")
+                .where("?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> nif:Context")
+                .where("?x nif:isString ?p");
+            rdfData = $("#new").rdf({databank: $.rdf.databank(rdf.dump())});
+            console.log(rdfData);
+            rdfData = addTerminologyTermsToRdf(rdfData, response);
+            processXmlResponse( rdfData.databank.dump({format :"application/rdf+xml"}), that.id,rdfData );
+        },
+        error: function(data){exceptionToDialog(data)},
+        dataType: "xml"
+    }))
+
+
+};
 
 
