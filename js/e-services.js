@@ -160,10 +160,9 @@ var eTerminology = {
 
 var doPostprocessingFilter = function() {
     var input = fwm.eServices[fwm.eServices.length-1].nif;
-    var filtername=  $("#filter-name").val()
+    var filtername=  $("#filter-name").val();
     var variables = filtername+ "?informat=rdf-xml";
     variables += "&outformat=json";
-    var that = this;
     $.ajax({
         type:"POST",
         url:fwm.fremeApi + "/toolbox/filter/documents/" +variables,
@@ -186,12 +185,13 @@ var getContextFromEEntity = function(that,input,response){
         data: input.input,//{input:   input.input,//},
         contentType: input.informat,
         success: function(data) {
+
             rdf = xmlToRdf(data)
                 .prefix("nif", "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#")
                 .where("?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> nif:Context")
-                .where("?x nif:isString ?p");
-            rdfData = $("#new").rdf({databank: $.rdf.databank(rdf.dump())});
-            console.log(rdfData);
+                .where("?x nif:isString ?p")
+                .where("?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?t");
+            rdfData= $.rdf().load(rdf.dump());
             rdfData = addTerminologyTermsToRdf(rdfData, response);
             processXmlResponse( rdfData.databank.dump({format :"application/rdf+xml"}), that.id,rdfData );
         },

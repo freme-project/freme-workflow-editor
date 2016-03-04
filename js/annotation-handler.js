@@ -3,11 +3,11 @@
  */
 var xmlToRdf = function(xml) {
 	try {
-		return rdf = $.rdf().load(xml, {});
+		return $.rdf().load(xml, {});
 	} catch (e) {
-		return rdf = $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral")) , {});
+		return $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral")) , {});
 	}
-}
+};
 var createAnnotations = function(rdf){
 	var datadump = rdf.databank.dump();
 	const MODE = { UNIQUE : 0, COLLECTION : 1};
@@ -237,7 +237,6 @@ var generateTooltip = function(annotation,str) {
 
 var addTerminologyTermsToRdf = function(rdf,json) {
 	var jrb = json.results.bindings;
-	console.log(rdf);
 	for (var i=0;i<jrb.length;i++) {
 
 		var subject = "<http://freme-project.eu/#char="+jrb[i].beginIndex.value+","+jrb[i].endIndex.value+">";

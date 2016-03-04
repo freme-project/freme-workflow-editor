@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	loadExample();
-
+	$("#rdf").rdf();
 	if (debug) {
 		console.log("DEBUG!!!");
 		//$("#input-area").val("Berlin is the capital of Germany");
@@ -12,7 +12,7 @@ $(document).ready(function() {
 	}
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
@@ -178,7 +178,6 @@ var processRdfResponse = function(data, id, rdf) {
 	service.nif = xmlToString(data);
 	$("#nif-"+id).html("<pre><code>"+escapeHtml(service.nif)+"</code></pre>");
 	service.annotations=createAnnotations(rdf);
-	console.log(service.annotations);
 	$("#output-"+id).html(matchAnnotationsToString(service.annotations));
 	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true,maxWidth:700});
 };
