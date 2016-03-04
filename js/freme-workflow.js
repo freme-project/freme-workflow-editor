@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	loadExample();
-	$("#rdf").rdf();
+	//$("#rdf").rdf();
 	if (debug) {
 		console.log("DEBUG!!!");
 		//$("#input-area").val("Berlin is the capital of Germany");
@@ -120,7 +120,7 @@ var eService = {
 		}
 		var i=0;
 		while(fwm.eServices[this.id-1-i].type=="deleted"){
-			i+=1
+			i+=1;
 			if (this.id-i==0) {
 				return inputArea.getInput();
 			}

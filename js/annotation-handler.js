@@ -67,7 +67,7 @@ var createAnnotations = function(rdf){
 								annoObj.context=true;
                                 annoObj.hasRelevance=true;
 							}
-							if (attr!="unknown" && attr != "anchorOf"){
+							if (attr!="unknown" && attr != "anchorOf" && attr != "isString"){
 								annoObj.hasRelevance=true;
 							}
 							//		console.log(annotation, "\t\t..."+predicate.substring(predicate.length-10,predicate.length),val.substring(val.length-10, val.length));
@@ -114,14 +114,17 @@ var matchAnnotationsToString = function(annotations) {
 	var a;
 
 	var context= {isString:"",target:[]};
-
 	if (annotations[annotations.length-1].context) {
 		context=annotations.pop();
 	}
 
 	var str=context.isString;
+	while(str[0]=="\""){
+		str=str.substring(1,str.length-1);
+	}
+
 	var final="";
-	for (k=0; k<annotations.length-1;k++) {
+	for (var k=0; k<annotations.length-1;k++) {
 		a=annotations[k];
 		final += str.substring(i, a.beginIndex);
 		final += generateTooltip(a,str.substring(a.beginIndex, a.endIndex));
@@ -170,7 +173,7 @@ var resolveOffsetConflicts = function(annotations){
 		}
 	}
 	if (debug && annotations.length>1) {
-		for (var k=0; k<annotations.length-1; k++) {
+		for (k=0; k<annotations.length-1; k++) {
 			if (annotations[k].endIndex>=annotations[k+1].beginIndex) {
 				console.log("Warning! Annotation Offsets were not cleanly sorted! " +
 					" Annotation: " + annotations[k].name + " endIndex: " + annotations[k].endIndex +
@@ -247,17 +250,17 @@ var addTerminologyTermsToRdf = function(rdf,json) {
 				$.rdf.triple(
 					subject,
 					"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#new_uri>",
-					"<"+objects[k].trim()+">"));
+					"<"+encodeURI(objects[k].trim())+">"));
 		}
 		objects = jrb[i].new_label.value.split(/,/g);
 
-		for (var k =0; k<objects.length;k++) {
+		for (k =0; k<objects.length;k++) {
 			rdf.add(
 				$.rdf.triple(
 					subject,
 					"<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#new_label>",
 
-					"<"+objects[k].trim()+">"));
+					"<"+encodeURI(objects[k].trim())+">"));
 		}
 		rdf.add($.rdf.triple(
 			subject,

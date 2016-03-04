@@ -62,7 +62,7 @@ var loadExample = function(){
         case "application/x-xliff+xml":text=exampleTextHolder.xliff;
             break;
         case "text/html":text=exampleTextHolder.html;
-            break
+            break;
         case "text/turtle":text=exampleTextHolder.turtle;
     }
     var area= $("#input-area");
