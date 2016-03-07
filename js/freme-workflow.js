@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	loadExample();
 	//$("#rdf").rdf();
+	fileSelected();
 	if (debug) {
 		console.log("DEBUG!!!");
 		//$("#input-area").val("Berlin is the capital of Germany");
@@ -53,9 +54,11 @@ var fwm = {
 var inputArea = {
 
 	getInput : function() {
+
+		var tab=$("#input-tabs").tabs("option","active");
 		return {
 			informat : $("#input-informat").val(),
-			input :  $("#input-area").val()
+			input :  tab==0 ? $("#input-area").val() : inputArea.uploadedText
 		};
 	}
 };
@@ -165,13 +168,21 @@ function stringToXml(oString) {
 		return (new DOMParser()).parseFromString(oString, "text/xml");
 	}
 }
-
+var responseToDialog = function(data) {
+	exceptionToDialog(data.responseText)
+};
 var exceptionToDialog = function(data){
-	$("#jquery-ui-dialog").html(data.responseText.replace(/\\\"/g,"''").replace(/\"/g," ").replace(/{/g,"").replace(/}/g,"").replace(/,/g,"<br>"))
+	if (typeof(data)=="object") {
+		data= JSON.stringify(data);
+	}
+	$("#jquery-ui-dialog").html(data.replace(/\\\"/g,"''").replace(/\"/g," ").replace(/{/g,"").replace(/}/g,"").replace(/,/g,"<br>"))
 	.dialog("open");
 };
 
-
+var stringToDialog = function(str) {
+	$("#jquery-ui-dialog").html("<p>"+escapeHtml(str)+"</p>")
+		.dialog("open");
+};
 
 var processRdfResponse = function(data, id, rdf) {
 	var service = fwm.eServices[id];
@@ -243,3 +254,32 @@ function jsonToTable(json) {
 
 	return li+"</table>";
 }
+
+
+
+
+var fileSelected = function() {
+	/* Based on http://www.matlus.com/html5-file-upload-with-progress/
+	 *
+	 *
+	 */
+	var file = document.getElementById('input-upload').files[0];
+
+	if (file) {
+		var fileSize = 0;
+		if (file.size > 1024 * 1024) {
+			fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+		} else {
+			fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+		}
+		document.getElementById('input-fileName').innerHTML = 'Name: ' + file.name;
+		document.getElementById('input-fileSize').innerHTML = 'Size: ' + fileSize;
+//		document.getElementById('input-fileType').innerHTML = 'Type: ' + file.type;
+
+		var f = new FileReader();
+		f.onload = function(abc) {
+			inputArea.uploadedText = f.result;
+		};
+		f.readAsText(file);
+	}
+};

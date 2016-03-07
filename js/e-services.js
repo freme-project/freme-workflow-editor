@@ -30,7 +30,7 @@ var eEntity = {
             data: input.input,//{input:   input.input,//},
             contentType: input.informat,
             success: function(data){processXmlResponse(data,that.id)},
-            error: function(data){exceptionToDialog(data)},
+            error: function(data){responseToDialog(data)},
             dataType: "xml"
         });
     }
@@ -62,7 +62,7 @@ var eLink = {
             data: input.input,//{input:   input.input,//},
             contentType: input.informat,
             success: function(data){processXmlResponse(data,that.id)},
-            error: function(data){exceptionToDialog(data)},
+            error: function(data){responseToDialog(data)},
             dataType: "xml"
         });
 
@@ -96,7 +96,7 @@ var eTranslation = {
                 data: input.input,//,{input: input.input},
                 contentType: input.informat,
                 success: function(data){processXmlResponse(data,that.id)},
-                error: function(data){exceptionToDialog(data)},
+                error: function(data){responseToDialog(data)},
                 dataType: "xml"
             });
     }
@@ -144,7 +144,7 @@ var eTerminology = {
                     getContextFromEEntity(that,input,data);
                 }
             },
-            error: function(data){exceptionToDialog(data)}
+            error: function(data){responseToDialog(data)}
 //            dataType: "csv"
         });
     }
@@ -164,7 +164,7 @@ var doPostprocessingFilter = function() {
         data: input,
         contentType: "application/rdf+xml",
         success: function(data){$("#filtered").html(jsonToTable(data));$("#filter-header").html("<strong>FILTER: "+filtername.toUpperCase()+"</strong>")},
-        error: function(data){exceptionToDialog(data)}
+        error: function(data){responseToDialog(data)}
        // dataType: "csv"
     });
 };
@@ -192,7 +192,7 @@ var getContextFromEEntity = function(that,input,response) {
             processXmlResponse(rdfData.databank.dump({format: "application/rdf+xml"}), that.id, rdfData);
         },
         error: function (data) {
-            exceptionToDialog(data)
+            responseToDialog(data)
         },
         dataType: "xml"
     })

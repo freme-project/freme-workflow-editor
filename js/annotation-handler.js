@@ -3,9 +3,13 @@
  */
 var xmlToRdf = function(xml) {
 	try {
-		return $.rdf().load(xml, {});
+		try {
+			return $.rdf().load(xml, {});
+		} catch (e) {
+			return $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral")), {});
+		}
 	} catch (e) {
-		return $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral")) , {});
+		exceptionToDialog(e);
 	}
 };
 var createAnnotations = function(rdf){
@@ -191,8 +195,13 @@ var generateAppendix = function(annotation) {
 	 * Each Translated context will be appended to the enriched text
 	 */
 	var appendix = "";
+	var text;
 	if (annotation.target) {
 		for (var i = 0; i < annotation.target.length; i++) {
+			text = annotation.target[i].text;
+			while(text[0]=="\""){
+				text=text.substring(1,text.length-1);
+			}
 			appendix += "<br><br><p><strong>Translation to: " + annotation.target[i].lang + "</strong></p>" + annotation.target[i].text;
 		}
 	}

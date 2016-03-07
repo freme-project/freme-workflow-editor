@@ -35,6 +35,7 @@
 				modal: true,
 				position: {my:"center",at : "top", of: window}
 			});
+			$("#input-tabs").tabs().removeClass("ui-widget ui-widget-content");
 		});
 
 	</script>
@@ -57,19 +58,36 @@
 		<div class="step">
 			<div class="inner-box">
 				<p class="box-title"><strong>INPUT TEXT</strong><p>
-				<textarea id="input-area" class="box-text" rows="15" style="width: 100%"></textarea>
-				<br/>
+				<div id="input-tabs">
+					<ul>
+						<li><a href="#input-tabs-1">Enter Input</a></li>
+						<li><a href="#input-tabs-2">Upload a File</a></li>
+					</ul>
+					<div id="input-tabs-1">
+						<textarea id="input-area" class="box-text" rows="15" style="width: 100%"></textarea>
+						<br/>
+						<table style="margin-left:10px">
+							<tr>
+								<td class = "label-dropdown" >Use Example</td>
+								<td><select style="width:140px" id = "loadExampleChoice">
+									<option value="text/plain">Plaintext</option>
+									<option value="application/x-xliff+xml">XLIFF 1.2</option>
+									<option value="text/html">HTML5</option>
+									<option value="text/turtle">Turtle</option>
+								</select></td>
+								<td><button onclick="loadExample()">Load</button></td>
+							</tr>
+						</table>
+					</div>
+					<div id="input-tabs-2">
+						<input onchange="fileSelected()" id="input-upload" type="file">
+						<div id="input-fileName"></div>
+						<div id="input-fileSize"></div>
+						<div id="input-fileType"></div>
+
+					</div>
+				</div>
 				<table style="margin-left:10px">
-					<tr>
-						<td class = "label-dropdown" >Use Example</td>
-						<td><select style="width:140px" id = "loadExampleChoice">
-							<option value="text/plain">Plaintext</option>
-							<option value="application/x-xliff+xml">XLIFF 1.2</option>
-							<option value="text/html">HTML5</option>
-							<option value="text/turtle">Turtle</option>
-						</select></td>
-						<td><button onclick="loadExample()">Load</button></td>
-					</tr>
 					<tr>
 						<td class = "label-dropdown">Specify input format</td>
 						<td><select  style="width:140px" id ="input-informat">
