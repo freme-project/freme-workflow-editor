@@ -150,10 +150,10 @@ var resolveOffsetConflicts = function(annotations){
 	*/
 	function compareOffset(a,b){
 		if (a.context) {
-			return -9999;
+			return -999999;
 		}
 		if (b.context) {
-			return 9999;
+			return 999999;
 		}
 		var diff = a.beginIndex-b.beginIndex;
 		if (diff === 0) {
@@ -165,10 +165,13 @@ var resolveOffsetConflicts = function(annotations){
 	annotations.sort(compareOffset);
 	var context = annotations[0];
 	annotations = annotations.slice(1);
+	for (var k=0; k<annotations.length; k++ ) {
+		console.log(annotations[k].beginIndex, annotations[k].endIndex, context.isString.substring(annotations[k].beginIndex, annotations[k].endIndex));
+	}
 	if (annotations.length>1) {
 		for (var k=0; k<annotations.length-1; k++) {
 			if (annotations[k].endIndex>=annotations[k+1].beginIndex) {
-				if (annotations[k].endIndex===annotations[k+1].endIndex) {
+				if (annotations[k].endIndex==annotations[k+1].endIndex) {
 					annotations[k].endIndex=annotations[k+1].beginIndex-1;
 				} else {
 					annotations[k+1].beginIndex=annotations[k].endIndex+1;
@@ -176,6 +179,10 @@ var resolveOffsetConflicts = function(annotations){
 			}
 		}
 	}
+	for (var k=0; k<annotations.length; k++ ) {
+		console.log(annotations[k].beginIndex, annotations[k].endIndex, context.isString.substring(annotations[k].beginIndex, annotations[k].endIndex));
+	}
+
 	if (debug && annotations.length>1) {
 		for (k=0; k<annotations.length-1; k++) {
 			if (annotations[k].endIndex>=annotations[k+1].beginIndex) {

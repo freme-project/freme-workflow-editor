@@ -1,4 +1,17 @@
 $(document).ready(function() {
+	$('.tooltip').tooltipster({
+		contentAsHTML : true,
+		maxWidth: 700
+	});
+	$("#jquery-ui-dialog").dialog({
+		buttons : [{text:"OK",click:function(){$(this).dialog("close")}}],
+		autoOpen: false,
+		maxWidth:800,
+		width:800,
+		modal: true,
+		position: {my:"center",at : "top", of: window}
+	});
+	$("#input-tabs").tabs().removeClass("ui-widget ui-widget-content");
 	loadExample();
 	//$("#rdf").rdf();
 	fileSelected();
@@ -6,14 +19,14 @@ $(document).ready(function() {
 		console.log("DEBUG!!!");
 		//$("#input-area").val("Berlin is the capital of Germany");
 		//$("#input-informat").val("text/plain");
-		fwm.addEService("e-terminology").doEnrichment();
-		//setTimeout(function() {fwm.addEService("e-link").doEnrichment()}, 2000);
+		fwm.addEService("e-entity").doEnrichment();
+		setTimeout(function() {fwm.addEService("e-terminology").doEnrichment()}, 7000);
 		/*fwm.addEService("e-translation");
 		$("#target-lang-2").val("nl")*/
 	}
 });
 
-var debug = false;
+var debug = true;
 var fwm = {
 
 	eServices : [],
