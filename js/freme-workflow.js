@@ -188,6 +188,7 @@ var exceptionToDialog = function(data){
 	if (typeof(data)=="object") {
 		data= JSON.stringify(data);
 	}
+
 	$("#jquery-ui-dialog").html(data.replace(/\\\"/g,"''").replace(/\"/g," ").replace(/{/g,"").replace(/}/g,"").replace(/,/g,"<br>"))
 	.dialog("open");
 };

@@ -23,7 +23,6 @@ var eEntity = {
         variables += "&language=" + $("#language-" + this.id).val();
         variables += "&mode=" + $("#mode-" + this.id).val();
         var that = this;
-
         $.ajax({
             type:"POST",
             url:fwm.fremeApi + "/e-entity/freme-ner/documents" +variables,

@@ -6,9 +6,10 @@ var xmlToRdf = function(xml) {
 		try {
 			return $.rdf().load(xml, {});
 		} catch (e) {
-			return $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral")), {});
+			return $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral").replace(/\n/g,"")), {});
 		}
 	} catch (e) {
+		e.reason="rdfQuery library error - could not create RDF Graph from response"
 		exceptionToDialog(e);
 	}
 };
@@ -165,9 +166,9 @@ var resolveOffsetConflicts = function(annotations){
 	annotations.sort(compareOffset);
 	var context = annotations[0];
 	annotations = annotations.slice(1);
-	for (var k=0; k<annotations.length; k++ ) {
+	/*for (var k=0; k<annotations.length; k++ ) {
 		console.log(annotations[k].beginIndex, annotations[k].endIndex, context.isString.substring(annotations[k].beginIndex, annotations[k].endIndex));
-	}
+	}*/
 	if (annotations.length>1) {
 		for (var k=0; k<annotations.length-1; k++) {
 			if (annotations[k].endIndex>=annotations[k+1].beginIndex) {
