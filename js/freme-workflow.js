@@ -17,10 +17,9 @@ $(document).ready(function() {
 	fileSelected();
 	if (debug) {
 		console.log("DEBUG!!!");
-		//$("#input-area").val("Berlin is the capital of Germany");
+		$("#input-area").val("Berlin is the capital of Germany in the European Union.\n\nThere is another line of text here.");
 		//$("#input-informat").val("text/plain");
 		fwm.addEService("e-entity").doEnrichment();
-		setTimeout(function() {fwm.addEService("e-terminology").doEnrichment()}, 7000);
 		/*fwm.addEService("e-translation");
 		$("#target-lang-2").val("nl")*/
 	}
@@ -203,7 +202,8 @@ var processRdfResponse = function(data, id, rdf) {
 	service.nif = xmlToString(data);
 	$("#nif-"+id).html("<pre><code>"+escapeHtml(service.nif)+"</code></pre>");
 	service.annotations=createAnnotations(rdf);
-	$("#output-"+id).html(matchAnnotationsToString(service.annotations));
+	var text = matchAnnotationsToString(service.annotations);
+	$("#output-"+id).html(text.replace(/\n/g,"<br>"));
 	$(".tooltip").tooltipster({contentAsHTML:true,multiple:true,maxWidth:700});
 };
 

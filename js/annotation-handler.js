@@ -3,10 +3,11 @@
  */
 var xmlToRdf = function(xml) {
 	try {
+		console.log(xmlToString(xml));
 		try {
 			return $.rdf().load(xml, {});
 		} catch (e) {
-			return $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral").replace(/\n/g," ")), {});
+			return $.rdf().load(stringToXml(xmlToString(xml).replace(/##XMLLiteral/g, "#XMLLiteral")), {});
 		}
 	} catch (e) {
 		e.reason="rdfQuery library error - could not create RDF Graph from response"
@@ -14,9 +15,11 @@ var xmlToRdf = function(xml) {
 	}
 };
 var createAnnotations = function(rdf){
+
 	var datadump = rdf.databank.dump();
 	const MODE = { UNIQUE : 0, COLLECTION : 1};
 	var attr;
+	console.log(datadump);
 	var mode;
 	annotations = [];
 	for (var annotation in datadump) {
@@ -92,6 +95,7 @@ var createAnnotations = function(rdf){
 			annotations[i].thumbnail = datadump[annotations[i].taIdentRef]["http://dbpedia.org/ontology/thumbnail"][0].value;
         }
 	}
+	console.log(annotations);
 	return resolveOffsetConflicts(annotations);
 };
 
