@@ -246,7 +246,7 @@ function jsonToTable(json) {
 	 * It felt more natural to use json instead of csv in javascript
 	 * Creates HTML Table out of Table-like JSON
 	 */
-	var li="<table><tr>";
+	var li="<div id='table-container'><table><tr>";
 	var cols=json.head.vars.length;
 	var val;
 	for (var i=0; i<cols;i++) {
@@ -266,7 +266,7 @@ function jsonToTable(json) {
 		li+="</tr>";
 	}
 
-	return li+"</table>";
+	return li+"</table></div>";
 }
 
 
