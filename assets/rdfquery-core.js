@@ -600,8 +600,6 @@
                 this.datatype = datatype;
                 this.value = d === undefined ? strip(value) : d.value(d.strip ? strip(value) : value)
 
-                console.log("//Rmove");
-                console.log(this.value);
                 return this;
             } else {
                 throw {
