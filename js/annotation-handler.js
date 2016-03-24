@@ -143,6 +143,87 @@ var matchAnnotationsToString = function(annotations) {
 	return final;
 };
 
+var resolveOffsetConflicts2 = function(annotations) {
+	function compareOffset(a,b){
+		if (a.context) {
+			return -999999;
+		}
+		if (b.context) {
+			return 999999;
+		}
+		var diff = a.beginIndex-b.beginIndex;
+		if (diff === 0) {
+			return a.endIndex- b.endIndex;
+		}
+		return diff;
+	}
+
+	annotations.sort(compareOffset);
+	var context = annotations[0];
+	annotations = annotations.slice(1);
+
+
+	var active=[];
+	var newAnnotations=[];
+	var current;
+	var newAnno;
+	while((current=findNext(annotations,index))!=null) {
+		if (current in active){
+			newAnno={};
+			for (var k=0; k<active.length;k++) {
+				newAnno=extend(newAnno,active[i]);
+			}
+			newAnnotations.push(newAnno);
+			current.remove(active[i]);
+		} else {
+			active.push(active[i])
+		}
+	}
+
+}
+
+function test() {
+
+	b=[ 0,11,15,18,19,25];
+	e=[10,20,17,20,21,30];
+	v=["a","b","c","d","e","f"];
+	annotations=[];
+	for (i=0;i<6;i++) {
+		annotations.push({beginIndex:b[i],endIndex:e[i],value+i:v[i]})
+	}
+
+	console.log(resolveOffsetConflicts2(annotations))
+}
+
+function findNext(annotations,index) {
+	if (annotations.length==0) {
+		return null;
+	}
+
+	var min=Integer.MAX_VALUE;
+	var item=null;
+	var mode = null;
+
+	for (var i=0;i<annotations.length;i++) {
+		if (annotations[i].beginIndex>=index) {
+			min=annotations[i].beginIndex;
+			item=annotations[i];
+			mode="begin";
+		} else if (annotations[i].endIndex>=index) {
+			min=annotations[i].beginIndex;
+			item=annotations[i];
+			mode="end";
+		}
+	}
+	return {object:item;min:}
+}
+
+function extend(o, p) {
+	for(prop in p) { // For all props in p.
+		o[prop] = p[prop]; // Add the property to o.
+	}
+	return o;
+}
 
 var resolveOffsetConflicts = function(annotations){
 	/*
