@@ -159,7 +159,7 @@ var doPostprocessingFilter = function() {
     variables += "&outformat=json";
     $.ajax({
         type:"POST",
-        url:fwm.fremeApi + "/toolbox/filter/documents/" +variables,
+        url:fwm.fremeApi + "/toolbox/convert/documents/" +variables,
         data: input,
         contentType: "application/rdf+xml",
         success: function(data){$("#filtered").html(jsonToTable(data));$("#filter-header").html("<strong>FILTER: "+filtername.toUpperCase()+"</strong>")},
