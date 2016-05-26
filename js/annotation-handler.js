@@ -182,7 +182,7 @@ var resolveOffsetConflicts2 = function(annotations) {
 
 }
 
-function test() {
+/*function test() {
 
 	b=[ 0,11,15,18,19,25];
 	e=[10,20,17,20,21,30];
@@ -216,7 +216,7 @@ function findNext(annotations,index) {
 		}
 	}
 	return {object:item;min:}
-}
+}*/
 
 function extend(o, p) {
 	for(prop in p) { // For all props in p.
