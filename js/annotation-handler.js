@@ -341,6 +341,8 @@ var generateTooltip = function(annotation,str) {
 var addTerminologyTermsToRdf = function(rdf,json) {
 	var jrb = json.results.bindings;
 	for (var i=0;i<jrb.length;i++) {
+		if(jrb[0].keys(obj).length === 0)
+			continue;
 
 		var subject = "<http://freme-project.eu/#char="+jrb[i].beginIndex.value+","+jrb[i].endIndex.value+">";
 
