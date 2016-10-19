@@ -30,7 +30,7 @@ var fwm = {
 
 	eServices : [],
 	idCounter : 0,
-	fremeApi : "http://api-dev.freme-project.eu/current",
+	fremeApi : "https://api.freme-project.eu/current",
 
 	addEService : function(type) {
 
