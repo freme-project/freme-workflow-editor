@@ -1,5 +1,7 @@
 # FREME Workflow Editor
 
+This repository is deprecated and not maintained any longer.
+
 This project works as a demonstration of what the FREME services can do.
 Its goal is to hide NIF from the user and show the capabilities of FREME.
 Focus lies on simplicity, so that the user will not have to work his way around
